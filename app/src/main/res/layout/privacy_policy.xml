@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:scrollbars="vertical"  >
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:background="#000000"
+        android:scrollbars="vertical"
+        android:stretchColumns="*" >
+
+        <TableRow >
+            <TextView android:layout_span="2"
+                android:id="@+id/textViewMessage"
+                android:textColor="#FFFFFF"
+                android:text="" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_margin="20dip"
+            android:background="#222222">
+
+            <Button
+                android:height="20dp"
+                android:layout_height="60dp"
+                android:textColor="@color/green"
+                android:textStyle="bold"
+                android:id="@+id/buttonAccept"
+                android:layout_weight="1"
+                android:text="@string/accept" />
+
+            <Button
+                android:height="20dp"
+                android:layout_height="60dp"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                android:id="@+id/buttonDecline"
+                android:layout_weight="1"
+                android:text="@string/decline" />
+        </TableRow>
+
+    </TableLayout>
+
+</ScrollView>

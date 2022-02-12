@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:scrollbars="vertical"  >
+
+    <TableLayout
+        android:theme="@style/Theme.AppCompat"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:scrollbars="vertical"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:layout_margin="10dip"
+            android:background="#000000" >
+
+            <TextView
+                android:id="@+id/textViewMessage"
+                android:layout_width="0dip"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/some_message"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="5dp"
+            android:background="#000000" >
+
+            <CheckBox
+                android:id="@+id/checkboxConnected"
+                android:layout_width="0dip"
+                android:layout_weight="2"
+                android:clickable="false"
+                android:gravity="center"
+                android:text="@string/connected"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="5dp"
+            android:background="#222222" >
+
+            <RadioGroup
+                android:id="@+id/RadioGroupLocked"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonLock"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/locked"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonUnlock"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/unlocked"
+                    android:textStyle="bold" />
+
+            </RadioGroup>
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="5dp"
+            android:background="#222222" >
+
+            <RadioGroup
+                android:id="@+id/RadioGroupAction"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonPauze"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/pauze"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonResume"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/resume"
+                    android:textStyle="bold" />
+
+            </RadioGroup>
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="5dp" />
+
+        <TableRow
+            android:background="#222222" >
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/enableCurrentChangeSwitch"
+                android:textColor="#FFFFFF"
+                android:background="#222222"
+                android:text="@string/change_charge_current"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <TableRow
+            android:background="#222222" >
+
+            <com.sdsmdg.harjot.croller.Croller
+                android:id="@+id/croller"
+                app:back_circle_color="@color/edit"
+                app:back_circle_disable_color="@color/locked"
+                app:enabled="false"
+                app:indicator_color="@color/white"
+                app:indicator_disable_color="@color/green"
+                app:indicator_width="12"
+                app:is_continuous="false"
+                app:label="Amps"
+                app:label_color="@color/white"
+                app:label_disabled_color="@color/gray"
+                app:label_font=""
+                app:label_size="25dp"
+                app:label_style="normal"
+                app:main_circle_color="@color/black"
+                app:main_circle_disable_color="@color/black"
+                app:max="6"
+                app:max_scale="32"
+                app:min="6"
+                app:progress_primary_color="@color/white"
+                app:progress_primary_disable_color="@color/green"
+                app:progress_secondary_color="@color/green"
+                app:progress_secondary_disable_color="@color/gray"
+                app:progress_secondary_color_max_scale="@color/red"
+                app:start_offset="45" />
+
+        </TableRow>
+
+    </TableLayout>
+</ScrollView>

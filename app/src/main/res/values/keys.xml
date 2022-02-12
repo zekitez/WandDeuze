@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="key_username">username</string>
+    <string name="key_password">password</string>
+    <string name="key_chargerId">chargerId</string>
+    <string name="key_logcat">LogCat</string>
+    <string name="key_logToFile">LogToFile</string>
+    <string name="key_connectionTimeOut">connectTimeOut</string>
+    <string name="key_privacyPolycyAccepted">PrivacyPolicyAccepted</string>
+    <string name="key_disclaimerAccepted">DisclaimerAccepted</string>
+</resources>

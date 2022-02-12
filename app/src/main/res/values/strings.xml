@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WandDeuze</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="chargerid">Charger Id</string>
+    <string name="preferences">Preferences</string>
+    <string name="connecttimeout">Wifi connection time out (seconds)</string>
+    <string name="connected">Connected !</string>
+    <string name="no_chargerdata">Received data has no chargerData.</string>
+    <string name="no_configdata">Received data has no configData.</string>
+    <string name="data_not_received">Data not received from wallbox.</string>
+    <string name="some_message">Waiting for reply...</string>
+    <string name="locked">Locked</string>
+    <string name="unlocked">UnLocked</string>
+    <string name="pauze">Pauze</string>
+    <string name="resume">Resume</string>
+    <string name="change_charge_current">Change charge current</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+    <string name="log_to_logcat">AndroidStudio Logcat</string>
+    <string name="log_to_file">To file LogThis.txt</string>
+</resources>
