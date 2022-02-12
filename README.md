@@ -22,11 +22,7 @@ The labels "Connected", ""Locked, "Unlocked", "Pauze", "Resume" and "Change char
 - green, change confirmed by the wallbox
 - red, change not confirmed by the wallbox
 
-![two](https://user-images.githubusercontent.com/35424390/153719031-36eaab07-7608-4490-8668-156be3a8c9d1.png)
-
-![one](https://user-images.githubusercontent.com/35424390/153719019-cb00e762-8c51-4c38-b9b6-b4f791609084.png)
-
-![three](https://user-images.githubusercontent.com/35424390/153719024-03034b6e-3b40-4aa2-a2e7-ac1668cd50e1.png)
+<img src="screenshots/two.png" height="400" alt="Screenshot" /> <img src="screenshots/one.png" height="400" alt="Screenshot"/> <img src="screenshots/three.png" height="400" alt="Screenshot"/>
 
 https://www.youtube.com/watch?v=NtlvPnDq5qw
 
