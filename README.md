@@ -39,4 +39,4 @@ Sources:
 
 Icon:
 
- Icon: https://iconmonstr.com/car-7-png/
+ https://iconmonstr.com/car-7-png/
