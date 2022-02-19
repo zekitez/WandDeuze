@@ -96,6 +96,7 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
     protected void onDestroy() {
         super.onDestroy();
         wallbox.destroyTimer();
+        finish();
     }
 
     //-----
