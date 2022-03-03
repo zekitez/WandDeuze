@@ -23,6 +23,7 @@
                 android:layout_width="0dip"
                 android:layout_weight="2"
                 android:gravity="center"
+                android:minLines="3"
                 android:text="@string/some_message"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="16sp"
@@ -36,10 +37,18 @@
             <CheckBox
                 android:id="@+id/checkboxConnected"
                 android:layout_width="0dip"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:clickable="false"
-                android:gravity="center"
                 android:text="@string/connected"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/checkboxPluggedIn"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:text="@string/plugged_in"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </TableRow>
@@ -60,7 +69,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:checked="true"
                     android:text="@string/locked"
                     android:textStyle="bold" />
 
@@ -111,6 +119,7 @@
         <TableRow
             android:background="#222222" >
             <androidx.appcompat.widget.SwitchCompat
+                android:layout_weight="2"
                 android:id="@+id/enableCurrentChangeSwitch"
                 android:textColor="#FFFFFF"
                 android:background="#222222"
@@ -123,6 +132,7 @@
             android:background="#222222" >
 
             <com.sdsmdg.harjot.croller.Croller
+                android:layout_weight="2"
                 android:id="@+id/croller"
                 app:back_circle_color="@color/edit"
                 app:back_circle_disable_color="@color/locked"
