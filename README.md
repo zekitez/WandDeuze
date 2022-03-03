@@ -40,3 +40,12 @@ Sources:
 Icon:
 
  https://iconmonstr.com/car-7-png/
+
+Attribute "status_id" and "status"                                  PluggedIn
+- 161,"status_description":"Ready"                                      -
+- 179,"status_description":"Connected: waiting for next schedule"       +
+- 181,"status_description":"Connected: waiting for car demand"          +
+- 182,"status_description":"Paused by user"                             +
+- 194,"status_description":"Charging"                                   +
+- 209,"status_description":"Locked"                                     -
+- 210,"status_description":"waiting_to_unlock"                          +
