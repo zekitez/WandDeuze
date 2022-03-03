@@ -41,7 +41,8 @@ Icon:
 
  https://iconmonstr.com/car-7-png/
 
-Attribute status_id or status, attribute status_description,  is plugged in
+Some replies from the WallBax with attributes are:
+attribute status_id or status, attribute status_description, (derived) is plugged in
 - 161, "Ready", no
 - 179, "Connected: waiting for next schedule", yes
 - 181, "Connected: waiting for car demand", yes
