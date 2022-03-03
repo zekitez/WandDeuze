@@ -22,7 +22,7 @@ The labels "Locked", "Unlocked", "Pauze", "Resume" and "Change charge current" c
 - green, change confirmed by the wallbox
 - red, change not confirmed by the wallbox
 
-That is ALL !
+That is ALL ! Warning: screenshots are from the first version.
 
 <img src="screenshots/two.png" height="400" alt="Screenshot" /> <img src="screenshots/one.png" height="400" alt="Screenshot"/> <img src="screenshots/three.png" height="400" alt="Screenshot"/>
 
