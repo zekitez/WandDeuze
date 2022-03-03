@@ -6,6 +6,7 @@ It may communicate with other Wallbox devices but I have only a Pulsar Plus to t
 You could also just use the Wallbox app but refuse Location access which then disables Bluetooth.
 WandDeuze does only 4 simple things what the Wallbox app also does:
 - display the status of the wallbox
+- display if a connection with the wallbox is established, and if the cable is plugged in.
 - lock or unlock the wallbox
 - pauze or resume the charge session
 - display and adjust the charging currrent
