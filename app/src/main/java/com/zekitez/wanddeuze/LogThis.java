@@ -99,7 +99,7 @@ public class LogThis {
                 }
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
                 Calendar rightNow = Calendar.getInstance();
-                appendLog(sdf.format(rightNow.getTime()) + " " + logFile.toString());
+                appendLog("\n"+sdf.format(rightNow.getTime()) + " " + logFile.toString());
                 startTimeLog = rightNow.getTimeInMillis();
 
                 Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
