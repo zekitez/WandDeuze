@@ -16,7 +16,7 @@ WandDeuze is my interpretation in dialect (German-NederSaksisch) for the words w
 The app is based on some scripts that I found on the internet in Python and HomeyScript.
 The sourcecode for the app is available on GIT:
 
-The labels "Connected", ""Locked, "Unlocked", "Pauze", "Resume" and "Change charge current" can have one of the next colors:
+The labels "Locked", "Unlocked", "Pauze", "Resume" and "Change charge current" can have one of the next colors:
 - white, available option or reported by wallbox as current state
 - gray, currently not allowed option
 - green, change confirmed by the wallbox
