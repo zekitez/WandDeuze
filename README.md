@@ -41,11 +41,11 @@ Icon:
 
  https://iconmonstr.com/car-7-png/
 
-Attribute "status_id" and "status"                                  PluggedIn
-- 161,"status_description":"Ready"                                      -
-- 179,"status_description":"Connected: waiting for next schedule"       +
-- 181,"status_description":"Connected: waiting for car demand"          +
-- 182,"status_description":"Paused by user"                             +
-- 194,"status_description":"Charging"                                   +
-- 209,"status_description":"Locked"                                     -
-- 210,"status_description":"waiting_to_unlock"                          +
+Attribute number from status_id or status, "status_description",  is PluggedIn
+- 161, "Rady", no
+- 179,"Connected: waiting for next schedule", yes
+- 181,"Connected: waiting for car demand", yes
+- 182,"Paused by user", yes
+- 194, "Charging", yes
+- 209, "Locked", no
+- 210, "waiting_to_unlock", yes
