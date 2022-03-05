@@ -44,7 +44,7 @@ public class LogThis {
             Log.i(TAG, message);
         }
         if (logToFile) {
-            appendLog(TAG + " Info : " + message);
+            appendLog(TAG + " Info : " + message, false);
         }
     }
 
@@ -53,7 +53,7 @@ public class LogThis {
             Log.d(TAG, message);
         }
         if (logToFile) {
-            appendLog(TAG + " Debug: " + message);
+            appendLog(TAG + " Debug: " + message, false);
         }
     }
 
@@ -62,7 +62,7 @@ public class LogThis {
             Log.w(TAG, message);
         }
         if (logToFile) {
-            appendLog(TAG + " Warn : " + message);
+            appendLog(TAG + " Warn : " + message, false);
         }
     }
 
@@ -71,7 +71,7 @@ public class LogThis {
             Log.e(TAG, message);
         }
         if (logToFile) {
-            appendLog(TAG + " *** Error: " + message);
+            appendLog(TAG + " *** Error: " + message, false);
         }
     }
 
@@ -81,7 +81,6 @@ public class LogThis {
         } else {
             logcat = false;
         }
-
         if (LogToFile) {
             logToFile = true;
         } else {
@@ -99,7 +98,7 @@ public class LogThis {
                 }
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
                 Calendar rightNow = Calendar.getInstance();
-                appendLog("\n"+sdf.format(rightNow.getTime()) + " " + logFile.toString());
+                appendLog(sdf.format(rightNow.getTime()) + " " + logFile.toString(), true);
                 startTimeLog = rightNow.getTimeInMillis();
 
                 Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -112,7 +111,7 @@ public class LogThis {
         }
     }
 
-    private static void appendLog(String text) {
+    private static void appendLog(String text, boolean startLog) {
         try {
             //BufferedWriter for performance, true to set append to file flag
             if (logFile != null) {
@@ -122,14 +121,20 @@ public class LogThis {
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
                     Calendar rightNow = Calendar.getInstance();
-                    appendLog(sdf.format(rightNow.getTime()) + " " + logFile.toString());
+                    startTimeLog = rightNow.getTimeInMillis();
+                    appendLog(sdf.format(rightNow.getTime()) + " " + logFile.toString(), true);
                 }
                 Calendar rightNow = Calendar.getInstance();
                 long currentTime = rightNow.getTimeInMillis();
                 long timeSinceStart = currentTime - startTimeLog;
 
                 BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-                buf.append(String.format("%10d ms : %s", timeSinceStart, text));
+                if ( startLog ) {
+                    buf.newLine();
+                    buf.append(text);
+                } else {
+                    buf.append(String.format("%10d ms : %s", timeSinceStart, text));
+                }
                 buf.newLine();
                 buf.close();
             }
