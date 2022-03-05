@@ -28,8 +28,11 @@ public class WallboxPulsarPlus {
     final String NAME = "name";
     final String STATUS_DESCRIPTION = "statusDescription";
     final String STATE_STATUS_DESCRIPTION = "status_description";
+    final String STATUS_ID = "status_id";
+    final String STATUS = "status";
     final String LOCKED = "locked";
     final String ACTION = "action";
+
     final String RESPONSECODE  = ".ResponseCode: ";
     final String RESPONSE = ".Response: ";
     final String MSG = " msg: ";
@@ -103,7 +106,7 @@ public class WallboxPulsarPlus {
                 e.printStackTrace();
                 String text = CONNECTTOWALLBOX + " " + e.getMessage();
                 LogThis.e(TAG, text);
-                callback.wallboxErrorListener(CONNECTTOWALLBOX + " " + e.getMessage());
+                callback.wallboxErrorListener(CONNECTTOWALLBOX + " " + e.getMessage() + ".  No internet ?");
             } finally {
                 connection.disconnect();
             }
@@ -159,7 +162,7 @@ public class WallboxPulsarPlus {
         this.chargerId = chargerId;
         destroyTimer();
         timer = new Timer();
-        timer.scheduleAtFixedRate(new periodicStateRequest(), 2000, 5000);
+        timer.scheduleAtFixedRate(new periodicStateRequest(), 1000, 5000);
     }
 
     private final String PERIODICSTATEREQUEST = "periodicStateRequest";
