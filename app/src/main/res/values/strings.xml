@@ -20,4 +20,5 @@
     <string name="decline">Decline</string>
     <string name="log_to_logcat">AndroidStudio Logcat</string>
     <string name="log_to_file">To file LogThis.txt</string>
+    <string name="plugged_in">Plugged in</string>
 </resources>

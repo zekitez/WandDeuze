@@ -88,7 +88,7 @@ public class WallboxPulsarPlus {
 
                 connection.setRequestMethod(METHOD_GET);
                 connection.setRequestProperty("Authorization", "Basic " + encodedUserPassword);
-                setCommonProperties(connection);
+                connection = setCommonProperties(connection);
 
                 responseCode = connection.getResponseCode();
                 String text = connection.getResponseMessage();
@@ -176,8 +176,8 @@ public class WallboxPulsarPlus {
                 URL url = new URL(URL_DOMAIN + URL_STATUS + chargerId);
                 connection = (HttpsURLConnection) url.openConnection();
                 connection.setRequestMethod(METHOD_GET);
-                setAuthorisation(connection);
-                setCommonProperties(connection);
+                connection = setAuthorisation(connection);
+                connection = setCommonProperties(connection);
 
                 responseCode = connection.getResponseCode();
                 String text = connection.getResponseMessage();
@@ -234,8 +234,8 @@ public class WallboxPulsarPlus {
                 URL url = new URL(URL_DOMAIN + URL_V2_CHARGER + chargerId);
                 connection = (HttpsURLConnection) url.openConnection();
                 connection.setRequestMethod(METHOD_PUT);
-                setAuthorisation(connection);
-                setCommonProperties(connection);
+                connection = setAuthorisation(connection);
+                connection = setCommonProperties(connection);
 
                 JSONObject control = new JSONObject();
                 control.put(LOCKED, (locked ? 1 : 0));
@@ -276,8 +276,8 @@ public class WallboxPulsarPlus {
                 URL url = new URL(URL_DOMAIN + URL_V3_CHARGERS + chargerId + URL_REMOTE_ACTION);
                 connection = (HttpsURLConnection) url.openConnection();
                 connection.setRequestMethod(METHOD_POST);
-                setAuthorisation(connection);
-                setCommonProperties(connection);
+                connection = setAuthorisation(connection);
+                connection = setCommonProperties(connection);
 
                 JSONObject control = new JSONObject();
                 control.put(ACTION, (actionPauze ? 2 : 1));  // Pause
@@ -322,8 +322,8 @@ public class WallboxPulsarPlus {
                 URL url = new URL(URL_DOMAIN + URL_V2_CHARGER + chargerId);
                 connection = (HttpsURLConnection) url.openConnection();
                 connection.setRequestMethod(METHOD_PUT);
-                setAuthorisation(connection);
-                setCommonProperties(connection);
+                connection = setAuthorisation(connection);
+                connection = setCommonProperties(connection);
 
                 JSONObject control = new JSONObject();
                 control.put("maxChargingCurrent", maxChargingCurrent);
@@ -354,18 +354,20 @@ public class WallboxPulsarPlus {
 
     //---------------------------------
     
-    private void setCommonProperties(HttpsURLConnection connection) {
+    private HttpsURLConnection setCommonProperties(HttpsURLConnection connection) {
         if (connection != null) {
             connection.setConnectTimeout(timeOutMs);
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
         }
+        return connection;
     }
 
-    private void setAuthorisation(HttpsURLConnection connection) {
+    private HttpsURLConnection setAuthorisation(HttpsURLConnection connection) {
         if (connection != null && token != null) {
             connection.setRequestProperty("Authorization", "Bearer " + token);
         }
+        return connection;
     }
 
     private String getStringResponse(HttpsURLConnection connection) throws IOException {

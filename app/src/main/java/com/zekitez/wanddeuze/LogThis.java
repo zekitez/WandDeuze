@@ -15,6 +15,7 @@ import java.util.Calendar;
 public class LogThis {
     private static String TAG = "LogThis";
     private static File logFile = null;
+    private static File prevLogFile = null;
     private static long startTimeLog;
     private static boolean logcat = true;
     private static boolean logToFile = true;
@@ -92,11 +93,13 @@ public class LogThis {
             if (logToFile && logFile == null) {
 
                 logFile = new File(activity.getExternalFilesDir(null), "LogThis.txt");
-                if (logFile.length() > 1024 * 1024) {
-                    logFile.delete();
+                prevLogFile = new File(activity.getExternalFilesDir(null), "LogThisPrev.txt");
+                if (logFile.length() > 1024000) {
+                    moveToPrevFile();
+                    //logFile.delete();
                     logFile.createNewFile();
                 }
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss:SSS");
                 Calendar rightNow = Calendar.getInstance();
                 appendLog(sdf.format(rightNow.getTime()) + " " + logFile.toString(), true);
                 startTimeLog = rightNow.getTimeInMillis();
@@ -115,11 +118,12 @@ public class LogThis {
         try {
             //BufferedWriter for performance, true to set append to file flag
             if (logFile != null) {
-                if (logFile.length() > 1024 * 1024) {
-                    logFile.delete();
+                if (logFile.length() > 1024000) {
+                    moveToPrevFile();
+                    //logFile.delete();
                     logFile.createNewFile();
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss:SSS");
                     Calendar rightNow = Calendar.getInstance();
                     startTimeLog = rightNow.getTimeInMillis();
                     appendLog(sdf.format(rightNow.getTime()) + " " + logFile.toString(), true);
@@ -144,4 +148,16 @@ public class LogThis {
         }
     }
 
+    private static void moveToPrevFile(){
+        if (prevLogFile.exists()){
+            prevLogFile.delete();
+            // Log.d(TAG,"moveToPrevFile delete prevLogFile");
+        }
+        logFile.renameTo(prevLogFile);
+        if (logFile.exists()){
+            logFile.delete();
+            // Log.d(TAG,"moveToPrevFile delete logFile");
+        }
+        // Log.d(TAG,"logFile = "+logFile.toString());
+    }
 }

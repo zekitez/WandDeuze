@@ -131,6 +131,10 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
         return (super.onOptionsItemSelected(item));
     }
 
+//    @Override
+//    public void onBackPressed() {
+//    }
+
     //-----------
 
     public void getPrefs(boolean askAcceptance) {
@@ -156,10 +160,6 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                 wallbox.connectToWallbox(username, password, connectionTimeOutSec);
             }
         }
-
-//        LogThis.d(TAG, "username           " + username);
-//        LogThis.d(TAG, "password           " + password);
-//        LogThis.d(TAG, "chargerId          " + chargerId);
         LogThis.d(TAG, "connection timeout " + connectionTimeOutSec);
     }
 
@@ -168,23 +168,27 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
     // A listener per radioButton results in one call per button push.
     // The radioGroup onCheckGhangedListener triggers multiple calls per button push.
 
-    final View.OnClickListener lockOnClickListener = new View.OnClickListener() {
+    public final View.OnClickListener lockOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             LogThis.d(TAG, "lockOnClickListener");
+            radioButtonUnLock.setTextColor(Color.WHITE);
+            radioButtonLock.setTextColor(Color.WHITE);
             wallbox.setWallboxLock(chargerId, true);
         }
     };
 
-    final View.OnClickListener unLockOnClickListener = new View.OnClickListener() {
+    public final View.OnClickListener unLockOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             LogThis.d(TAG, "un-LockOnClickListener");
+            radioButtonUnLock.setTextColor(Color.WHITE);
+            radioButtonLock.setTextColor(Color.WHITE);
             wallbox.setWallboxLock(chargerId, false);
         }
     };
 
-    final View.OnClickListener pauzeOnClickListener = new View.OnClickListener() {
+    public final View.OnClickListener pauzeOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             LogThis.d(TAG, "pauzeOnClickListener");
@@ -193,7 +197,7 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
         }
     };
 
-    final View.OnClickListener resumeOnClickListener = new View.OnClickListener() {
+    public final View.OnClickListener resumeOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             LogThis.d(TAG, "resumeOnClickListener");
@@ -202,7 +206,7 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
     };
 
     int progress = 0;
-    final CompoundButton.OnCheckedChangeListener enableCurrentChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    public final CompoundButton.OnCheckedChangeListener enableCurrentChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean bool) {
             croller.setEnabled(bool);
@@ -222,12 +226,24 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
 
     //------- Common
 
-    private void setDescriptionPluggedIn(int status, String description){
+    private void handleStatus(int status, String description){
         textViewMessage.setText(description);
         if (status == 161 || status == 209){  // 161 = ready, 209 = Locked
             checkBoxPluggedIn.setChecked(false);
         } else {
             checkBoxPluggedIn.setChecked(true);
+        }
+        setRadioButtonsLockedUnlocked(true,Color.WHITE);
+        if (status == 194){                  // 194 = charging then only allow pauze.
+            radioButtonPauze.setTextColor(Color.WHITE);
+            radioButtonPauze.setEnabled(true);
+            radioButtonResume.setTextColor(Color.GRAY);
+            radioButtonResume.setEnabled(false);
+        } else {
+            radioButtonPauze.setTextColor(Color.GRAY);
+            radioButtonPauze.setEnabled(false);
+            radioButtonResume.setTextColor(Color.WHITE);
+            radioButtonResume.setEnabled(true);
         }
     }
 
@@ -268,8 +284,6 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                 checkBoxConnected.setTextColor(getResources().getColor(R.color.white));
                 textViewMessage.setText(R.string.some_message);
                 wallbox.getWallboxState(chargerId);    // Start
-                setRadioButtonsLockedUnlocked(true,Color.WHITE );
-                setRadioButtonsPauseResume(true,Color.WHITE );
             } else {
                 checkBoxConnected.setTextColor(getResources().getColor(R.color.red));
                 textViewMessage.setText(text);
@@ -285,30 +299,24 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                 try {
                     if (state.has("max_available_power")){
                         croller.setMax(state.getInt("max_available_power"));
-//                        LogThis.d(TAG,"state max_available_power " + state.getString("max_available_power"));
                     } else {
                         croller.setMax(64);
                     }
                     if (state.has(wallbox.CONFIG_DATA)) {
                         JSONObject configData = state.getJSONObject(wallbox.CONFIG_DATA);
-//                        LogThis.d(TAG, "state name = " + state.getString("name"));
-//                        LogThis.d(TAG, "state status_description = " + state.getString("status_description"));
-//                        LogThis.d(TAG, "configData locked = " + configData.getInt(wallbox.LOCKED));
 
-                        //textViewMessage.setText(getTitle(state, wallbox.STATE_STATUS_DESCRIPTION));
-                        setDescriptionPluggedIn(state.getInt(wallbox.STATUS_ID), getTitle(state, wallbox.STATE_STATUS_DESCRIPTION));
+                        handleStatus(state.getInt(wallbox.STATUS_ID), getTitle(state, wallbox.STATE_STATUS_DESCRIPTION));
 
-                        if (configData.getInt(wallbox.LOCKED) == 1) {
+                        if (configData.getInt(wallbox.LOCKED) == 1) {  // LOCKED ?
                             radioGroupLocked.check(R.id.radioButtonLock);
                             croller.setBackCircleDisabledColor(getResources().getColor(R.color.locked));
-                            setRadioButtonsPauseResume(false,Color.GRAY );
 
-                        } else if (configData.getInt(wallbox.LOCKED) == 0) {
+                        } else if (configData.getInt(wallbox.LOCKED) == 0) {  // UNLOCKED ?
                             radioGroupLocked.check(R.id.radioButtonUnlock);
                             croller.setBackCircleDisabledColor(getResources().getColor(R.color.unlocked));
-                            setRadioButtonsPauseResume(true,Color.WHITE );
 
                         } else {
+                            radioGroupLocked.clearCheck();
                             radioButtonUnLock.setTextColor(Color.RED);
                             radioButtonLock.setTextColor(Color.RED);
                         }
@@ -317,11 +325,11 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                                 radioGroupAction.check(R.id.radioButtonResume);
                             } else if (configData.getInt("remote_action") == 2) {
                                 radioGroupAction.check(R.id.radioButtonPauze);
-                            } else {
+                            } else {                        // Remote_action  = 0
                                 radioGroupAction.clearCheck();
                             }
-                        } else {
-                            radioGroupAction.clearCheck();
+//                        } else {
+//                            radioGroupAction.clearCheck();
                         }
                         if (configData.has("max_charging_current")){
                             croller.setProgress(configData.getInt("max_charging_current"));
@@ -354,24 +362,21 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                         JSONObject data = response.getJSONObject(wallbox.DATA);
                         if (data.has(wallbox.CHARGER_DATA)) {
                             JSONObject chargerData = data.getJSONObject(wallbox.CHARGER_DATA);
-//                            textViewMessage.setText(getTitle(chargerData, wallbox.STATUS_DESCRIPTION));
-                            setDescriptionPluggedIn(chargerData.getInt(wallbox.STATUS) ,getTitle(chargerData, wallbox.STATUS_DESCRIPTION));
+
+                            handleStatus(chargerData.getInt(wallbox.STATUS) ,getTitle(chargerData, wallbox.STATUS_DESCRIPTION));
 
                             if (chargerData.getInt(wallbox.LOCKED) == 1) {
                                 radioGroupLocked.check(R.id.radioButtonLock);
-                                radioButtonUnLock.setTextColor(Color.WHITE);
                                 radioButtonLock.setTextColor(Color.GREEN);
                                 croller.setBackCircleDisabledColor(getResources().getColor(R.color.locked));
-                                setRadioButtonsPauseResume(false,Color.GRAY );
 
                             } else if (chargerData.getInt(wallbox.LOCKED) == 0) {
                                 radioGroupLocked.check(R.id.radioButtonUnlock);
                                 radioButtonUnLock.setTextColor(Color.GREEN);
-                                radioButtonLock.setTextColor(Color.WHITE);
                                 croller.setBackCircleDisabledColor(getResources().getColor(R.color.unlocked));
-                                setRadioButtonsPauseResume(true,Color.WHITE );
 
                             } else {
+                                radioGroupLocked.clearCheck();
                                 radioButtonUnLock.setTextColor(Color.RED);
                                 radioButtonLock.setTextColor(Color.RED);
                             }
@@ -401,13 +406,17 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
             LogThis.d(TAG, "wallboxActionChangeListener " + response);
             if (stateReceived) {
                 try {
+                    // The response has NO status.
                     if (response.has(wallbox.ACTION)) {
-                        if (response.getInt(wallbox.ACTION) == 1){
+                        int action = response.getInt(wallbox.ACTION);
+                        if (action == 1){    // RESUME ?
                             radioButtonPauze.setTextColor(Color.WHITE);
                             radioButtonResume.setTextColor(Color.GREEN);
-                        } else if (response.getInt(wallbox.ACTION) == 2){
+                        } else if (action == 2){  // PAUZE ?
                             radioButtonPauze.setTextColor(Color.GREEN);
                             radioButtonResume.setTextColor(Color.WHITE);
+                        } else if (action == 0){
+                            radioGroupAction.clearCheck();
                         }
                     } else {
                         textViewMessage.setText(R.string.data_not_received);
@@ -466,10 +475,11 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
         runOnUiThread(() -> {
             LogThis.d(TAG, "wallboxErrorListener: " + error);
             textViewMessage.setText(error);
-            setRadioButtonsLockedUnlocked(false,Color.GRAY );
-            setRadioButtonsPauseResume(false,Color.GRAY );
+//            setRadioButtonsLockedUnlocked(false,Color.GRAY );
+//            setRadioButtonsPauseResume(false,Color.GRAY );
         });
 
     }
 
     //---------------------------
+}
