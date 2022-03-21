@@ -247,8 +247,43 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
         }
     }
 
-    private String getTitle(JSONObject object, String description) throws JSONException {
-        return (object.getString(wallbox.NAME) + "\n" + object.getString(description));
+    private String getTitle(JSONObject object, String description, String status) throws JSONException {
+        String title = "";
+        if (object.has(description)) {
+            title = object.getString(wallbox.NAME) + "\n" + object.getString(description);
+        } else {
+            if (object.has(status)) {
+                int state = object.getInt(status);
+                title = object.getString(wallbox.NAME) + "\n";
+                switch (state) {
+                    case 161:
+                        title = title + "Ready.";
+                        break;
+                    case 179:
+                        title = title + "Connected: waiting for next schedule.";
+                        break;
+                    case 181:
+                        title = title + "Connected: waiting for car demand.";
+                        break;
+                    case 182:
+                        title = title + "Paused by user.";
+                        break;
+                    case 194:
+                        title = title + "Charging.";
+                        break;
+                    case 209:
+                        title = title + "Locked.";
+                        break;
+                    case 210:
+                        title = title + "Waiting for unlock.";
+                        break;
+                    default:
+                        title = title + "Unknown state:" + state;
+                        break;
+                }
+            }
+        }
+        return title;
     }
 
     private void setRadioButtonsPauseResume(boolean enabled, int color){
@@ -305,7 +340,7 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                     if (state.has(wallbox.CONFIG_DATA)) {
                         JSONObject configData = state.getJSONObject(wallbox.CONFIG_DATA);
 
-                        handleStatus(state.getInt(wallbox.STATUS_ID), getTitle(state, wallbox.STATE_STATUS_DESCRIPTION));
+                        handleStatus(state.getInt(wallbox.STATUS_ID), getTitle(state, wallbox.STATE_STATUS_DESCRIPTION, wallbox.STATUS_ID));
 
                         if (configData.getInt(wallbox.LOCKED) == 1) {  // LOCKED ?
                             radioGroupLocked.check(R.id.radioButtonLock);
@@ -363,7 +398,7 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                         if (data.has(wallbox.CHARGER_DATA)) {
                             JSONObject chargerData = data.getJSONObject(wallbox.CHARGER_DATA);
 
-                            handleStatus(chargerData.getInt(wallbox.STATUS) ,getTitle(chargerData, wallbox.STATUS_DESCRIPTION));
+                            handleStatus(chargerData.getInt(wallbox.STATUS), getTitle(chargerData, wallbox.STATUS_DESCRIPTION, wallbox.STATUS));
 
                             if (chargerData.getInt(wallbox.LOCKED) == 1) {
                                 radioGroupLocked.check(R.id.radioButtonLock);
