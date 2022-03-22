@@ -43,11 +43,14 @@ Icon:
  https://iconmonstr.com/car-7-png/
 
 Some replies from the WallBox with attributes are (per line):
-attribute status_id or status, attribute status_description, (derived) is plugged in
+attribute status_id or status, attribute status_description, (derived) is cable plugged in
 - 161, "Ready", no
 - 179, "Connected: waiting for next schedule", yes
+- 180, "Connected: waiting for car demand", yes
 - 181, "Connected: waiting for car demand", yes
 - 182, "Paused by user", yes
 - 194, "Charging", yes
 - 209, "Locked", no
 - 210, "waiting_to_unlock", yes
+
+Note: since approx. 2022-03-20 the status_description attribute is no longer present in the replies of the WallBox.
