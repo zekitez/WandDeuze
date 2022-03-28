@@ -1,5 +1,6 @@
 package com.zekitez.wanddeuze;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -59,6 +60,14 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
         wallbox = new WallboxPulsarPlus(this);
 
         setContentView(R.layout.main_activity);
+        try{
+            Context context = getApplicationContext();
+            String versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+            setTitle(getString(R.string.app_name) + "  " + versionName );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         textViewMessage = findViewById(R.id.textViewMessage);
         checkBoxConnected = findViewById(R.id.checkboxConnected);
         checkBoxPluggedIn = findViewById(R.id.checkboxPluggedIn);
@@ -257,30 +266,33 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                 title = object.getString(wallbox.NAME) + "\n";
                 switch (state) {
                     case 161:
-                        title = title + "Ready.";
+                        title = title + getString(R.string.status_ready);
                         break;
                     case 179:
-                        title = title + "Connected: waiting for next schedule.";
+                        title = title + getString(R.string.status_wait_next_schedule);
                         break;
+                    case 180:
                     case 181:
-                        title = title + "Connected: waiting for car demand.";
+                        title = title + getString(R.string.status_wait_car_demand);
                         break;
                     case 182:
-                        title = title + "Paused by user.";
+                        title = title + getString(R.string.status_paused);
                         break;
                     case 194:
-                        title = title + "Charging.";
+                        title = title + getString(R.string.status_charging);
                         break;
                     case 209:
-                        title = title + "Locked.";
+                        title = title + getString(R.string.status_locked);
                         break;
                     case 210:
-                        title = title + "Waiting for unlock.";
+                        title = title + getString(R.string.status_wait_unlock);
                         break;
                     default:
-                        title = title + "Unknown state:" + state;
+                        title = title + getString(R.string.status_unknown) + state;
                         break;
                 }
+            } else {
+                title = getString(R.string.status_attrs_missing);
             }
         }
         return title;
@@ -398,7 +410,45 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                         if (data.has(wallbox.CHARGER_DATA)) {
                             JSONObject chargerData = data.getJSONObject(wallbox.CHARGER_DATA);
 
-                            handleStatus(chargerData.getInt(wallbox.STATUS), getTitle(chargerData, wallbox.STATUS_DESCRIPTION, wallbox.STATUS));
+                            handleStatus(chargerData.getInt(wallbox.STATUS),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    (chargerData, wallbox.STATUS_DESCRIPTION, wallbox.STATUS));
 
                             if (chargerData.getInt(wallbox.LOCKED) == 1) {
                                 radioGroupLocked.check(R.id.radioButtonLock);

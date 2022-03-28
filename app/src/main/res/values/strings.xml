@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WandDeuze</string>
@@ -21,4 +28,13 @@
     <string name="log_to_logcat">AndroidStudio Logcat</string>
     <string name="log_to_file">To file LogThis.txt</string>
     <string name="plugged_in">Plugged in</string>
+    <string name="status_ready">Ready.</string>
+    <string name="status_wait_next_schedule">Connected: waiting for next schedule.</string>
+    <string name="status_wait_car_demand">Connected: waiting for car demand.</string>
+    <string name="status_paused">Paused by user.</string>
+    <string name="status_charging">Charging.</string>
+    <string name="status_locked">Locked.</string>
+    <string name="status_wait_unlock">Waiting for unlock.</string>
+    <string name="status_unknown">Unknown state:</string>
+    <string name="status_attrs_missing">Attribute status and status description missing.</string>
 </resources>
