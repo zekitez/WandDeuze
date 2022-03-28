@@ -410,45 +410,7 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                         if (data.has(wallbox.CHARGER_DATA)) {
                             JSONObject chargerData = data.getJSONObject(wallbox.CHARGER_DATA);
 
-                            handleStatus(chargerData.getInt(wallbox.STATUS),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                    (chargerData, wallbox.STATUS_DESCRIPTION, wallbox.STATUS));
+                            handleStatus(chargerData.getInt(wallbox.STATUS), getTitle(chargerData, wallbox.STATUS_DESCRIPTION, wallbox.STATUS));
 
                             if (chargerData.getInt(wallbox.LOCKED) == 1) {
                                 radioGroupLocked.check(R.id.radioButtonLock);
