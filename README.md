@@ -44,6 +44,7 @@ Icon:
 
 Some replies from the WallBox with attributes are (per line):
 attribute status_id or status, attribute status_description, (derived) is cable plugged in
+-   0, "NOT Connected to my.wallbox.com . Power Off-On (fuse) the wallbox.", unknown thus no
 - 161, "Ready", no
 - 179, "Connected: waiting for next schedule", yes
 - 180, "Connected: waiting for car demand", yes
