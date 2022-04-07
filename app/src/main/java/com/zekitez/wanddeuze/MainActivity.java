@@ -265,6 +265,9 @@ MainActivity extends AppCompatActivity implements WallboxResultListener {
                 int state = object.getInt(status);
                 title = object.getString(wallbox.NAME) + "\n";
                 switch (state) {
+                    case 0:
+                        title = title + getString(R.string.status_not_connected);
+                        break;
                     case 161:
                         title = title + getString(R.string.status_ready);
                         break;
