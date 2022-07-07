@@ -131,16 +131,6 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        LogThis.d(TAG, "onPause");
-        wallbox.destroyTimer();
-        destroySlowDownTimer();
-        finish();
-        Process.killProcess(Process.myPid());
-    }
-
-    @Override
     public void onBackPressed(){
         LogThis.d(TAG, "onBackPressed");
         new AlertDialog.Builder(this)
@@ -170,15 +160,16 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_prefs) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_prefs) {
             Intent intent = new Intent(this, PrefsActivity.class);
             startActivity(intent);
             return (true);
 
-        } else if (item.getItemId() == R.id.action_disclaimer){
+        } else if (itemId == R.id.action_disclaimer) {
             new AcceptDeclineDialog(MainActivity.this, R.layout.disclaimer, globalFunctions.getDisclaimerTxt());
 
-        } else if (item.getItemId() == R.id.action_privacy_policy){
+        } else if (itemId == R.id.action_privacy_policy) {
             new AcceptDeclineDialog(MainActivity.this, R.layout.privacy_policy, globalFunctions.getPrivicyPolicyTxt());
         }
         return (super.onOptionsItemSelected(item));
@@ -635,7 +626,6 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                 textViewMessage.setText(response.toString());
             }
         });
-
     }
 
     @Override
