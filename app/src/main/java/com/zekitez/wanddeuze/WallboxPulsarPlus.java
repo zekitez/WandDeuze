@@ -14,8 +14,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -52,32 +53,27 @@ public class WallboxPulsarPlus {
 
     private final WallboxResultListener callback;
 
-    private Timer timer = null;
+    ScheduledExecutorService timer = null;
 
     private int timeOutMs = 2000;
-    private String encodedUserPassword = null, token = null;
+    private String encodedUserPassword = null, token = null, chargerId;
+
+    //-----------------------------------
 
     public WallboxPulsarPlus(WallboxResultListener callback) {
         this.callback = callback;
     }
 
-    public void destroyTimer() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
-
     // Example connectToWallbox: getStringResponse
-    //        {"jwt":"eye_some_very_long_code_which_I_shortened", "user_id":123456, "ttl":0123456789, "error":false, "status":200}
+    //        {"jwt":"eye.._some_very_long_code_which_I_shortened", "user_id":123456, "ttl":0123456789, "error":false, "status":200}
     private final String CONNECTTOWALLBOX = "connectToWallbox";
 
-    public void connectToWallbox(String user, String password, int timeOutSec) {
-        this.timeOutMs = Math.abs(timeOutSec * 1000);   // Millieseconds
+    public void connectToWallbox(String user, String password, int timeOutMs) {
+        this.timeOutMs = timeOutMs;
         new Thread(() -> {
             HttpsURLConnection connection = null;
             try {
-                LogThis.d(TAG, CONNECTTOWALLBOX + " timeOutSeconds:" + timeOutSec);
+                LogThis.d(TAG, CONNECTTOWALLBOX + " timeOutMillieSeconds:" + timeOutMs);
                 int responseCode;
                 String userPassword = user + ":" + password;
                 byte[] userPasswordInBytes = userPassword.getBytes(StandardCharsets.UTF_8);
@@ -108,6 +104,7 @@ public class WallboxPulsarPlus {
                 LogThis.e(TAG, text);
                 callback.wallboxErrorListener(CONNECTTOWALLBOX + " " + e.getMessage() + ".  No internet ?");
             } finally {
+                assert connection != null;
                 connection.disconnect();
             }
         }).start();
@@ -155,21 +152,28 @@ public class WallboxPulsarPlus {
 //                                                    "group_id":123456
 //                                                   }
 // }
-    private String chargerId;
 
-    public void getWallboxState(String chargerId) {
+    public void destroyTimer() {
+        if (timer != null) {
+            LogThis.d(TAG,"destroyTimer" );
+            timer.shutdown();
+            timer = null;
+        }
+    }
+
+    public void getWallboxState(String chargerId, int startDelay, int period) {
+        LogThis.d(TAG, "getWallboxState startDelay:" + startDelay + "  period:" + period);
         if (token == null) return;
         this.chargerId = chargerId;
         destroyTimer();
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new periodicStateRequest(), 1000, 5000);
+        timer = Executors.newSingleThreadScheduledExecutor();
+        timer.scheduleAtFixedRate(new periodicStateRequest(), startDelay, period, TimeUnit.MILLISECONDS);
     }
 
-    private final String PERIODICSTATEREQUEST = "periodicStateRequest";
-
-    class periodicStateRequest extends TimerTask {
+    private class periodicStateRequest implements Runnable {
         public void run() {
             HttpsURLConnection connection = null;
+            String PERIODICSTATEREQUEST = "periodicStateRequest";
             try {
                 LogThis.d(TAG, PERIODICSTATEREQUEST);
                 int responseCode;
@@ -185,7 +189,7 @@ public class WallboxPulsarPlus {
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     JSONObject response = getJsonResponse(connection);
-                    LogThis.d(TAG, PERIODICSTATEREQUEST + RESPONSE + response);
+                    // LogThis.d(TAG, PERIODICSTATEREQUEST + RESPONSE + response);
                     callback.wallboxStateListener(true, response);
                 } else {
                     callback.wallboxErrorListener(PERIODICSTATEREQUEST + " " + text + "\n" + ERROR_USER_PWD);
@@ -196,6 +200,7 @@ public class WallboxPulsarPlus {
                 LogThis.e(TAG, text);
                 callback.wallboxErrorListener(text);
             } finally {
+                assert connection != null;
                 connection.disconnect();
             }
         }
@@ -247,7 +252,7 @@ public class WallboxPulsarPlus {
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     JSONObject response = getJsonResponse(connection);
-                    LogThis.d(TAG, SETWALLBOXLOCK + RESPONSE + response);
+                    // LogThis.d(TAG, SETWALLBOXLOCK + RESPONSE + response);
                     callback.wallboxLockChangeListener(true, response);
                 } else {
                     callback.wallboxErrorListener(SETWALLBOXLOCK + " " + text);
@@ -258,6 +263,7 @@ public class WallboxPulsarPlus {
                 LogThis.e(TAG, text);
                 callback.wallboxErrorListener(text);
             } finally {
+                assert connection != null;
                 connection.disconnect();
             }
         }).start();
@@ -289,7 +295,7 @@ public class WallboxPulsarPlus {
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     JSONObject response = getJsonResponse(connection);
-                    LogThis.d(TAG, SETWALLBOXACTION + RESPONSE + response);
+                    // LogThis.d(TAG, SETWALLBOXACTION + RESPONSE + response);
                     callback.wallboxActionChangeListener(true, response);
                 } else {
                     callback.wallboxErrorListener(SETWALLBOXACTION + " " + text);
@@ -299,11 +305,13 @@ public class WallboxPulsarPlus {
                 String text = e.getMessage();
                 LogThis.e(TAG, SETWALLBOXACTION + " " + e.getMessage());
                 try {
+                    assert text != null;
                     callback.wallboxActionChangeListener(false, new JSONObject(text));
                 } catch (JSONException jsonException) {
                     jsonException.printStackTrace();
                 }
             } finally {
+                assert connection != null;
                 connection.disconnect();
             }
         }).start();
@@ -335,7 +343,7 @@ public class WallboxPulsarPlus {
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     JSONObject response = getJsonResponse(connection);
-                    LogThis.d(TAG, SETWALLBOXMAXCHARGINGCURRENT + " response: " + response);
+                    // LogThis.d(TAG, SETWALLBOXMAXCHARGINGCURRENT + " response: " + response);
                     callback.wallboxMaxChargingCurrentListener(true, response);
                 } else {
                     callback.wallboxErrorListener(SETWALLBOXMAXCHARGINGCURRENT + " " + text);
@@ -346,6 +354,7 @@ public class WallboxPulsarPlus {
                 LogThis.e(TAG, text);
                 callback.wallboxErrorListener(text);
             } finally {
+                assert connection != null;
                 connection.disconnect();
             }
         }).start();

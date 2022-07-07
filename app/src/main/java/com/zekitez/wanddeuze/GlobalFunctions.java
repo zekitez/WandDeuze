@@ -4,6 +4,8 @@ import android.app.Application;
 
 public class GlobalFunctions extends Application {
 
+	private final String TAG = "GlobalFunctions";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -12,6 +14,7 @@ public class GlobalFunctions extends Application {
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
+		LogThis.d(TAG, "onLowMemory");
 		System.gc();
 	}
 

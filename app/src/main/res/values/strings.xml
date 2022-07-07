@@ -22,7 +22,7 @@
     <string name="log_to_file">To file LogThis.txt</string>
     <string name="plugged_in">Plugged in</string>
     <string name="status_ready">Ready.</string>
-    <string name="status_wait_next_schedule">Connected: waiting for next schedule.</string>
+    <string name="status_wait_next_schedule">Connected: waiting for next schedule to start.</string>
     <string name="status_wait_car_demand">Connected: waiting for car demand.</string>
     <string name="status_paused">Paused by user.</string>
     <string name="status_charging">Charging.</string>
@@ -31,4 +31,7 @@
     <string name="status_unknown">Unknown state:</string>
     <string name="status_attrs_missing">Attribute status and status description missing.</string>
     <string name="status_not_connected">NOT Connected to my.wallbox.com\nPower Off-On (fuse ?) the wallbox.</string>
+    <string name="txt_are_you_sure_exit">Are you sure you want to exit ?</string>
+    <string name="txt_really_exit">Exit WandDeuze !</string>
+    <string name="nbrReceivedChargerStatus">Display number of received charger statusses</string>
 </resources>

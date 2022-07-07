@@ -3,7 +3,6 @@ package com.zekitez.wanddeuze;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.SharedPreferences;
-import android.text.Spanned;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,9 +12,9 @@ import androidx.preference.PreferenceManager;
 
 public class AcceptDeclineDialog {
 
-    private Dialog dialog;
-    private Activity activity;
-    private int layoutResID = 0;
+    private final Dialog dialog;
+    private final Activity activity;
+    private final int layoutResID;
 
     public AcceptDeclineDialog(Activity activity, int layoutResID, String message) {
 

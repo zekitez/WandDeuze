@@ -19,7 +19,14 @@
         <EditTextPreference
             app:key="@string/key_connectionTimeOut"
             app:title="@string/connecttimeout"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            app:singleLineTitle="false" />
+        <CheckBoxPreference
+            app:key="@string/key_displayNbrChargerStats"
+            app:title="@string/nbrReceivedChargerStatus"
+            app:useSimpleSummaryProvider="true"
+            app:singleLineTitle="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Logging">

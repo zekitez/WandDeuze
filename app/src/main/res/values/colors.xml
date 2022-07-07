@@ -10,7 +10,13 @@
     <color name="red">#FFFF0000</color>
     <color name="green">#FF00FF00</color>
     <color name="gray">#FFb8b8b8</color>
-    <color name="edit">#FF03DAC5</color>
-    <color name="locked">#FFFAF884</color>
+    <color name="edit">#FF6200EE</color>
+
+    <color name="locked">#FFC107</color>
     <color name="unlocked">#FF77DD77</color>
+    <color name="charging">#1976F8</color>
+    <color name="paused">#19F8DE</color>
+    <color name="ready">#19F8DE</color>
+    <color name="waitingNextSchedule">#19F8DE</color>
+    <color name="waitingCarDemand">#19F8DE</color>
 </resources>
