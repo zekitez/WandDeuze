@@ -32,5 +32,6 @@ public class PrefsActivity extends AppCompatActivity {
             finish();
         }
         return (super.onOptionsItemSelected(item));
+	}
 }
-}
+

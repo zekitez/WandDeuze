@@ -15,7 +15,9 @@ import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import com.sdsmdg.harjot.croller.Croller;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +25,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.preference.PreferenceManager;
+
 import android.os.Process;
 
 import java.util.concurrent.Executors;
@@ -32,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity implements WallboxResultListener {
 
     private final String TAG = "MainActivity";
-    
+
     private String chargerId = "12345";
     private Boolean displayNbrChargerStatusses = false;
 
@@ -55,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     private ScheduledExecutorService timer = null;
 
     public GlobalFunctions globalFunctions;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +100,8 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
         croller = findViewById(R.id.croller);
 
-        setRadioButtonsLockedUnlocked(false,Color.GRAY );
-        setRadioButtonsPauseResume(false,Color.GRAY );
-
+        setRadioButtonsLockedUnlocked(false, Color.GRAY);
+        setRadioButtonsPauseResume(false, Color.GRAY);
     }
 
     @Override
@@ -150,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         super.onConfigurationChanged(newConfig);
         LogThis.d(TAG, "onConfigurationChanged");
     }
-    //-----
+        //-----
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,10 +172,11 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
         } else if (itemId == R.id.action_privacy_policy) {
             new AcceptDeclineDialog(MainActivity.this, R.layout.privacy_policy, globalFunctions.getPrivicyPolicyTxt());
+
         }
         return (super.onOptionsItemSelected(item));
-    }
 
+    }
 
     //-----------
 
@@ -217,6 +219,8 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
             radioButtonUnLock.setTextColor(Color.WHITE);
             radioButtonLock.setTextColor(Color.WHITE);
             wallbox.setWallboxLock(chargerId, true);
+            wallbox.getWallboxState(chargerId, 2000, 2000);  // Restart the timer
+            createSlowDownTimer(10000);
         }
     };
 
@@ -227,6 +231,8 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
             radioButtonUnLock.setTextColor(Color.WHITE);
             radioButtonLock.setTextColor(Color.WHITE);
             wallbox.setWallboxLock(chargerId, false);
+            wallbox.getWallboxState(chargerId, 2000, 2000);  // Restart the timer
+            createSlowDownTimer(10000);
         }
     };
 
@@ -235,7 +241,9 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         public void onClick(View view) {
             LogThis.d(TAG, "pauzeOnClickListener");
             radioButtonResume.setEnabled(true);
-            wallbox.setWallboxAction(chargerId,true);
+            wallbox.setWallboxAction(chargerId, true);
+            wallbox.getWallboxState(chargerId, 2000, 2000);  // Restart the timer
+            createSlowDownTimer(10000);
         }
     };
 
@@ -243,7 +251,9 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         @Override
         public void onClick(View view) {
             LogThis.d(TAG, "resumeOnClickListener");
-            wallbox.setWallboxAction(chargerId,false);
+            wallbox.setWallboxAction(chargerId, false);
+            wallbox.getWallboxState(chargerId, 2000, 2000);  // Restart the timer
+            createSlowDownTimer(10000);
         }
     };
 
@@ -255,12 +265,13 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
             enableCurrentChangeSwitch.setTextColor(Color.WHITE);
             LogThis.d(TAG, "enableCurrentChangeListener " + checkedChanged);
             if (checkedChanged) {
-                wallbox.destroyTimer(); // No updates during current change.
-                progress = croller.getProgress();
+                progress = croller.getProgress();  // Remember the value.
             } else {
-                if ( progress != croller.getProgress()){
+                if (progress != croller.getProgress()) {  // OnChange only
                     progress = croller.getProgress();
                     wallbox.setWallboxMaxChargingCurrent(chargerId, progress);
+                    wallbox.getWallboxState(chargerId, 2000, 2000);    // Start
+                    createSlowDownTimer(10000);
                 }
             }
         }
@@ -268,15 +279,18 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
     // ---------- Timer --------------------
 
-    private void destroySlowDownTimer() {
+    private synchronized void destroySlowDownTimer() {
         if (timer != null) {
             timer.shutdown();
             timer = null;
         }
     }
 
-    private void createSlowDownTimer(int startDelay){
+    private synchronized void createSlowDownTimer(int startDelay){
         LogThis.d(TAG, "createSlowDownTimer startDelay:" + startDelay);
+        if (timer != null){
+            destroySlowDownTimer();
+        }
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(new SlowDownStateRequests(), startDelay, 1000, TimeUnit.MILLISECONDS);
     }
@@ -294,11 +308,11 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
     int count = 1;
 
-    private void handleStatus(int status, String description){
+    private synchronized void handleStatus(int status, String description) {
         if (displayNbrChargerStatusses) {
             textViewMessage.setText("" + count + ".   " + description);
         } else {
-        textViewMessage.setText(description);
+            textViewMessage.setText(description);
         }
         count ++;
         if (status == WallBoxStatus.STATUS_NOT_CONNECTED ||
@@ -313,22 +327,22 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         } else {
             checkBoxPluggedIn.setChecked(true);
             if (status == WallBoxStatus.STATUS_CHARGING ) {                  // 194 = charging then only allow pauze.
-            radioButtonPauze.setTextColor(Color.WHITE);
-            radioButtonPauze.setEnabled(true);
-            radioButtonResume.setTextColor(Color.GRAY);
-            radioButtonResume.setEnabled(false);
-        } else {
-            radioButtonPauze.setTextColor(Color.GRAY);
-            radioButtonPauze.setEnabled(false);
-            radioButtonResume.setTextColor(Color.WHITE);
-            radioButtonResume.setEnabled(true);
+                radioButtonPauze.setTextColor(Color.WHITE);
+                radioButtonPauze.setEnabled(true);
+                radioButtonResume.setTextColor(Color.GRAY);
+                radioButtonResume.setEnabled(false);
+            } else {
+                radioButtonPauze.setTextColor(Color.GRAY);
+                radioButtonPauze.setEnabled(false);
+                radioButtonResume.setTextColor(Color.WHITE);
+                radioButtonResume.setEnabled(true);
+            }
         }
-    }
         setRadioButtonsLockedUnlocked(true, Color.WHITE);
     }
 
 
-    private void handleLocked(int lockedState, int status, boolean fromChangeListener) {
+    private synchronized void handleLocked(int lockedState, int status, boolean fromChangeListener) {
         int backCircleColor ;
 
         if (lockedState == 1) {  // Locked ?
@@ -385,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     }
 
 
-    private String getTitle(JSONObject object, String description, String status) throws JSONException {
+    private synchronized String getTitle(JSONObject object, String description, String status) throws JSONException {
 
         String title = object.getString(wallbox.NAME) + "\n";
         if (object.has(description)) {
@@ -431,22 +445,22 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         return title;
     }
 
-    private void setRadioButtonsPauseResume(boolean enabled, int color){
+    private void setRadioButtonsPauseResume(boolean enabled, int color) {
         radioButtonPauze.setEnabled(enabled);
         radioButtonResume.setEnabled(enabled);
         radioButtonPauze.setTextColor(color);
         radioButtonResume.setTextColor(color);
-        if ( !enabled ) {
+        if (!enabled) {
             radioGroupAction.clearCheck();
         }
     }
 
-    private void setRadioButtonsLockedUnlocked(boolean enabled, int color){
+    private void setRadioButtonsLockedUnlocked(boolean enabled, int color) {
         radioButtonLock.setEnabled(enabled);
         radioButtonUnLock.setEnabled(enabled);
         radioButtonLock.setTextColor(color);
         radioButtonUnLock.setTextColor(color);
-        if ( !enabled ) {
+        if (!enabled) {
             radioGroupLocked.clearCheck();
         }
         enableCurrentChangeSwitch.setEnabled(enabled);
@@ -478,7 +492,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
             LogThis.d(TAG, "wallboxStateListener " + resultReceived + " " + state.toString());
             if (resultReceived) {
                 try {
-                    if (state.has("max_available_power")){
+                    if (state.has("max_available_power")) {
                         croller.setMax(state.getInt("max_available_power"));
                     } else {
                         croller.setMax(64);
@@ -500,10 +514,12 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 //                        } else {
 //                            radioGroupAction.clearCheck();
                         }
-                        if (configData.has("max_charging_current")){
-                            croller.setProgress(configData.getInt("max_charging_current"));
-                        } else {
-                            croller.setProgress(1);
+                        if ( !croller.isEnabled() ) { // No updates while changing the current.
+                            if (configData.has("max_charging_current")) {
+                                croller.setProgress(configData.getInt("max_charging_current"));
+                            } else {
+                                croller.setProgress(1);
+                            }
                         }
                     } else {
                         textViewMessage.setText(R.string.no_configdata);
@@ -536,8 +552,6 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                             handleStatus(status, getTitle(chargerData, wallbox.STATUS_DESCRIPTION, wallbox.STATUS));
                             handleLocked(chargerData.getInt(wallbox.LOCKED), status, true);
 
-                            wallbox.getWallboxState(chargerId, 2000, 2000);  // Restart the timer
-                            createSlowDownTimer(10000);
                         } else {
                             textViewMessage.setText(R.string.no_chargerdata);
                         }
@@ -558,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
 
     @Override
-    public void wallboxActionChangeListener(boolean stateReceived, JSONObject response) {
+    public synchronized void wallboxActionChangeListener(boolean stateReceived, JSONObject response) {
         runOnUiThread(() -> {
             LogThis.d(TAG, "wallboxActionChangeListener " + stateReceived + " " + response);
             if (stateReceived) {
@@ -566,20 +580,19 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                     // The response has NO status.
                     if (response.has(wallbox.ACTION)) {
                         int action = response.getInt(wallbox.ACTION);
-                        if (action == 1){    // RESUME ?
+                        if (action == 1) {    // RESUME ?
                             radioButtonPauze.setTextColor(Color.WHITE);
                             radioButtonResume.setTextColor(Color.GREEN);
-                        } else if (action == 2){  // PAUZE ?
+
+                        } else if (action == 2) {  // PAUZE ?
                             radioButtonPauze.setTextColor(Color.GREEN);
                             radioButtonResume.setTextColor(Color.WHITE);
-                        } else if (action == 0){
+                        } else if (action == 0) {
                             radioGroupAction.clearCheck();
                         }
                     } else {
                         textViewMessage.setText(R.string.data_not_received);
                     }
-                    wallbox.getWallboxState(chargerId, 2000, 2000);  // Restart the timer
-                    createSlowDownTimer(10000);
                 } catch (Exception e) {
                     e.printStackTrace();
                     String text = "wallboxActionChangeListener " + e.getMessage();
@@ -594,7 +607,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
 
     @Override
-    public void wallboxMaxChargingCurrentListener(boolean stateReceived, JSONObject response) {
+    public synchronized void wallboxMaxChargingCurrentListener(boolean stateReceived, JSONObject response) {
         runOnUiThread(() -> {
             LogThis.d(TAG, "wallBoxMaxChargingCurrentListener " + stateReceived + " " + response);
             if (stateReceived) {
@@ -603,7 +616,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                         JSONObject data = response.getJSONObject(wallbox.DATA);
                         if (data.has(wallbox.CHARGER_DATA)) {
                             JSONObject chargerData = data.getJSONObject(wallbox.CHARGER_DATA);
-                            if ( chargerData.has("maxChargingCurrent") && progress == chargerData.getInt("maxChargingCurrent") ){
+                            if (chargerData.has("maxChargingCurrent") && progress == chargerData.getInt("maxChargingCurrent")) {
                                 enableCurrentChangeSwitch.setTextColor(Color.GREEN);
                             } else {
                                 enableCurrentChangeSwitch.setTextColor(Color.RED);
@@ -614,8 +627,6 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                     } else {
                         textViewMessage.setText(R.string.data_not_received);
                     }
-                    wallbox.getWallboxState(chargerId, 2000, 2000);  // Restart the timer
-                    createSlowDownTimer(4000);
                 } catch (Exception e) {
                     e.printStackTrace();
                     String text = "wallBoxMaxChargingCurrentListener " + e.getMessage();
@@ -629,7 +640,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     }
 
     @Override
-    public void wallboxErrorListener(String error) {
+    public synchronized void wallboxErrorListener(String error) {
         runOnUiThread(() -> {
             LogThis.d(TAG, "wallboxErrorListener: " + error);
             textViewMessage.setText(error);
