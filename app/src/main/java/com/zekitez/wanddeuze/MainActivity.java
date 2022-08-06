@@ -381,6 +381,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                 backCircleColor = getResources().getColor(R.color.waitingCarDemand);
                 break;
             case WallBoxStatus.STATUS_PAUSED:
+            case WallBoxStatus.STATUS_POWER_BOOST_WAITING:
                 backCircleColor = getResources().getColor(R.color.paused);
                 break;
             case WallBoxStatus.STATUS_CHARGING:
@@ -424,6 +425,9 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                         break;
                     case WallBoxStatus.STATUS_PAUSED:
                         title = title + getString(R.string.status_paused);
+                        break;
+                    case WallBoxStatus.STATUS_POWER_BOOST_WAITING:
+                        title = title + getString(R.string.status_power_boost_waiting);
                         break;
                     case WallBoxStatus.STATUS_CHARGING:
                         title = title + getString(R.string.status_charging);

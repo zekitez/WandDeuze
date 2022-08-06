@@ -9,6 +9,7 @@ public class WallBoxStatus {
     static final int STATUS_WAIT_CAR_DEMAND_0 = 180;
     static final int STATUS_WAIT_CAR_DEMAND_1 = 181;
     static final int STATUS_PAUSED = 182;
+    static final int STATUS_POWER_BOOST_WAITING = 185;
     static final int STATUS_CHARGING = 194;
     static final int STATUS_LOCKED = 209;
     static final int STATUS_WAIT_UNLOCK = 210;

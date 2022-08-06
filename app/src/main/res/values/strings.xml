@@ -25,7 +25,8 @@
     <string name="status_wait_next_schedule">Connected: waiting for next schedule to start.</string>
     <string name="status_wait_car_demand">Connected: waiting for car demand.</string>
     <string name="status_paused">Paused by user.</string>
-    <string name="status_charging">Charging.</string>
+    <string name="status_power_boost_waiting">Connected, PowerBoost reports:\nNOT ENOUGH POWER AVAILABLE\nto start charging.</string>
+    <string name="status_charging">Charging...</string>
     <string name="status_locked">Locked.</string>
     <string name="status_wait_unlock">Waiting for unlock.</string>
     <string name="status_unknown">Unknown state:</string>
