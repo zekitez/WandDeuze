@@ -50,6 +50,7 @@ attribute status_id or status, attribute status_description, (derived) is cable 
 - 180, "Connected: waiting for car demand", yes
 - 181, "Connected: waiting for car demand", yes
 - 182, "Paused by user", yes
+- 185, "Connected, PowerBoost reports: NOT ENOUGH POWER AVAILABLE to start charging", yes
 - 194, "Charging", yes
 - 209, "Locked", no
 - 210, "waiting_to_unlock", yes
