@@ -1,3 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Reply Preference -->
+    <!-- Label ordering must match values -->
+    <array name="pref_lang_option_labels">
+        <item>@string/pref_lang_label_dutch</item>
+        <item>@string/pref_lang_label_english</item>
+        <item>@string/pref_lang_label_french</item>
+        <item>@string/pref_lang_label_german</item>
+        <item>@string/pref_lang_label_norway</item>
+        <item>@string/pref_lang_label_spanish</item>
+        <item>@string/pref_lang_label_swedish</item>
+    </array>
+
+    <array name="pref_lang_option_values">
+        <item>@string/pref_lang_dutch_value</item>
+        <item>@string/pref_lang_english_value</item>
+        <item>@string/pref_lang_french_value</item>
+        <item>@string/pref_lang_german_value</item>
+        <item>@string/pref_lang_norway_value</item>
+        <item>@string/pref_lang_spanish_value</item>
+        <item>@string/pref_lang_swedish_value</item>
+    </array>
 </resources>

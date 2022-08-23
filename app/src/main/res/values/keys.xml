@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="key_username">username</string>
-    <string name="key_password">password</string>
-    <string name="key_chargerId">chargerId</string>
-    <string name="key_logcat">LogCat</string>
-    <string name="key_logToFile">LogToFile</string>
-    <string name="key_connectionTimeOut">connectTimeOut</string>
-    <string name="key_privacyPolycyAccepted">PrivacyPolicyAccepted</string>
-    <string name="key_disclaimerAccepted">DisclaimerAccepted</string>
-    <string name="key_displayNbrChargerStats">displayNbrChargerStats</string>
+    <string name="key_loginAccount" translatable="false">loginAccount</string>
+    <string name="key_username" translatable="false">username</string>
+    <string name="key_password" translatable="false">password</string>
+
+    <string name="key_charger" translatable="false">charger</string>
+    <string name="key_chargerId" translatable="false">chargerId</string>
+    <string name="key_connectionTimeOut" translatable="false">connectTimeOut</string>
+    <string name="key_displayNbrChargerStats" translatable="false">displayNbrChargerStats</string>
+
+    <string name="key_settings" translatable="false">settings</string>
+    <string name="key_displayLanguage" translatable="false">displayLanguage</string>
+    <string name="key_logcat" translatable="false">LogCat</string>
+    <string name="key_logToFile" translatable="false">LogToFile</string>
+
+    <string name="key_privacyPolycyAccepted" translatable="false">PrivacyPolicyAccepted</string>
+    <string name="key_disclaimerAccepted" translatable="false">DisclaimerAccepted</string>
 
 </resources>
