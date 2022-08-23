@@ -12,6 +12,7 @@ WandDeuze does only 4 simple things what the Wallbox app also does:
 - display and adjust the charging currrent
 
 These are the very basic things needed to use the wallbox, more capabilities are not needed.
+Multi language support is present: Nederlands, English, Français, Deutsch, Norge, Español, Svenska.
 
 WandDeuze is my interpretation in dialect (German-NederSaksisch) for the words wall (wand) and box (deuze).
 The app is based on some scripts that I found on the internet in Python and HomeyScript.
