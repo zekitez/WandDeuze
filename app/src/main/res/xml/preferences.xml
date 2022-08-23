@@ -1,6 +1,7 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="Login account">
+    <PreferenceCategory app:title="@string/login_account"
+        app:key="@string/key_loginAccount" >
         <EditTextPreference
             app:key="@string/key_username"
             app:title="@string/username"
@@ -11,11 +12,13 @@
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Charger">
+    <PreferenceCategory app:title="@string/charger"
+        app:key="@string/key_charger">
         <EditTextPreference
             app:key="@string/key_chargerId"
             app:title="@string/chargerid"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            app:singleLineTitle="false" />
         <EditTextPreference
             app:key="@string/key_connectionTimeOut"
             app:title="@string/connecttimeout"
@@ -26,10 +29,16 @@
             app:title="@string/nbrReceivedChargerStatus"
             app:useSimpleSummaryProvider="true"
             app:singleLineTitle="false" />
-
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Logging">
+    <PreferenceCategory app:title="@string/settings"
+        app:key="@string/key_settings" >
+        <ListPreference
+            app:defaultValue="pref_lang_english_value"
+            app:entries="@array/pref_lang_option_labels"
+            app:entryValues="@array/pref_lang_option_values"
+            app:key="@string/key_displayLanguage"
+            app:title="@string/language" />
         <CheckBoxPreference
             app:key="@string/key_logcat"
             app:title="@string/log_to_logcat"
@@ -37,9 +46,8 @@
         <CheckBoxPreference
             app:key="@string/key_logToFile"
             app:title="@string/log_to_file"
-            app:useSimpleSummaryProvider="true" />
-
-
+            app:useSimpleSummaryProvider="true"
+            app:singleLineTitle="false" />
     </PreferenceCategory>
 
 </PreferenceScreen>
