@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+// import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.sdsmdg.harjot.croller.utilities.Utils;
 
 public class Croller extends View {
 
+    // private String TAG = "Croller";
     private float midx, midy;
     private Paint textPaint, circlePaint, circlePaint2, linePaint;
     private float currdeg = 0, deg = 3, downdeg = 0;
@@ -90,18 +92,21 @@ public class Croller extends View {
     public Croller(Context context) {
         super(context);
         init();
+        // Log.d(TAG,"Croller 1");
     }
 
     public Croller(Context context, AttributeSet attrs) {
         super(context, attrs);
         initXMLAttrs(context, attrs);
         init();
+        // Log.d(TAG,"Croller 2");
     }
 
     public Croller(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initXMLAttrs(context, attrs);
         init();
+        // Log.d(TAG,"Croller 3");
     }
 
     private void init() {
@@ -226,6 +231,7 @@ public class Croller extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
+        // Log.d(TAG,"onMeasure "+ widthSize + " " + heightSize);
         int width;
         int height;
 
@@ -262,6 +268,7 @@ public class Croller extends View {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+        // Log.d(TAG,"onLayout "+ getWidth() + " " + getHeight());
 
         midx = getWidth() / 2.0f;
         midy = getHeight() / 2.0f;
@@ -374,13 +381,13 @@ public class Croller extends View {
 
             textPaint.setColor( isEnabled ? progressPrimaryColor : progressPrimaryDisabledColor );
             // canvas.drawText(label , midx, midy + textPaint.getFontMetrics().top, textPaint);
-            canvas.drawText("Set: "+getProgress() , midx, midy + textPaint.getFontMetrics().top, textPaint);
+            canvas.drawText(getContext().getString(R.string.set)+getProgress() , midx, midy + textPaint.getFontMetrics().top, textPaint);
 
             textPaint.setColor( isEnabled ? progressSecondaryColor : progressSecondaryDisabledColor );
-            canvas.drawText("Allowed: "+max, midx, midy , textPaint);
+            canvas.drawText(getContext().getString(R.string.allowed)+max, midx, midy , textPaint);
 
             textPaint.setColor( progressSecondaryColorMaxScale);
-            canvas.drawText("Scale: "+maxScale, midx, midy - textPaint.getFontMetrics().top, textPaint);
+            canvas.drawText(getContext().getString(R.string.scale)+maxScale, midx, midy - textPaint.getFontMetrics().top, textPaint);
 
             textPaint.setColor( Color.WHITE);
             canvas.drawText(label, midx, midy - 5 * textPaint.getFontMetrics().top / 2, textPaint);
