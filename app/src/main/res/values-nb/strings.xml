@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WandDeuze</string>
+    <string name="username">Brukernavn</string>
+    <string name="password">Passord</string>
+    <string name="chargerid">Serienummer</string>
+    <string name="preferences">Innstillinger</string>
+    <string name="connecttimeout">WLAN-tidsavbrudd (sekunder)</string>
+    <string name="connected">Tilkoblet</string>
+    <string name="no_chargerdata">De mottatte dataene inneholder ingen ladedata.</string>
+    <string name="no_configdata">De mottatte dataene inneholder ingen konfigurasjonsdata.</string>
+    <string name="data_not_received">Ingen data mottatt fra Wallbox.</string>
+    <string name="some_message">Venter på data…</string>
+    <string name="locked">Låst</string>
+    <string name="unlocked">Ulåst</string>
+    <string name="pauze">Pause</string>
+    <string name="resume">Fortsett</string>
+    <string name="change_charge_current">Endre ladestrøm</string>
+    <string name="accept">Godta</string>
+    <string name="decline">Avslå</string>
+    <string name="log_to_logcat">AndroidStudio Logcat</string>
+    <string name="log_to_file">Lagre data i LogThis.txt</string>
+    <string name="plugged_in">Kabel plugget inn</string>
+    <string name="status_ready">Klar.</string>
+    <string name="status_wait_next_schedule">Tilkoblet: Venter etter innlastingsplan.</string>
+    <string name="status_wait_car_demand">Tilkoblet: Venter på etterspørsel etter bil.</string>
+    <string name="status_paused">Satt på pause av bruker.</string>
+    <string name="status_power_boost_waiting">Tilkoblet, PowerBoost rapporterer:\nINGEN STRØM TILGJENGELIG\nå lade.</string>
+    <string name="status_charging">Lading pågår…</string>
+    <string name="status_locked">Låst.</string>
+    <string name="status_wait_unlock">Venter på opplåsing.</string>
+    <string name="status_unknown">"Ukjent status: "</string>
+    <string name="status_attrs_missing">Dataattributt status og statusbeskrivelse mangler.</string>
+    <string name="status_not_connected">IKKE koblet til my.wallbox.com\nSlå wallboxen av og på igjen (sikringsmålerboks)\nRiktig pålogging ?</string>
+    <string name="txt_are_you_sure_exit">Avslutt, er du sikker ?</string>
+    <string name="txt_really_exit">WandDeuze avslutt !</string>
+    <string name="nbrReceivedChargerStatus">Vis antall mottatte statuser</string>
+    <string name="login_account">Påloggingskonto</string>
+    <string name="settings">Innstillinger</string>
+    <string name="charger">Lader</string>
+
+    <string name="language">Språk: Norsk</string>
+    <string name="disclaimer">Ansvarsfraskrivelse</string>
+    <string name="privacy_policy">Personvernerklæring</string>
+    <string name="error_user_pwd">Brukernavn, passord, serienummer eller ikke Online ?\n</string>
+</resources>

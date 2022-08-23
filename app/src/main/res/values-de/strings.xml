@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WandDeuze</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="chargerid">Seriennummer</string>
+    <string name="preferences">Einstellungen</string>
+    <string name="connecttimeout">WLAN-Zeitüberschreitung (Sekunden)</string>
+    <string name="connected">Verbunden</string>
+    <string name="no_chargerdata">Die empfangenen Daten enthalten keine Ladedaten.</string>
+    <string name="no_configdata">Die empfangenen Daten enthalten keine Konfigurationsdaten.</string>
+    <string name="data_not_received">Keine Daten von der Wallbox empfangen.</string>
+    <string name="some_message">Warten auf Daten…</string>
+    <string name="locked">Gesperrt</string>
+    <string name="unlocked">Entsperrt</string>
+    <string name="pauze">Pause</string>
+    <string name="resume">Fortsetzen</string>
+    <string name="change_charge_current">Ladestrom ändern</string>
+    <string name="accept">Akzeptieren</string>
+    <string name="decline">Ablehnen</string>
+    <string name="log_to_logcat">AndroidStudio Logcat</string>
+    <string name="log_to_file">Daten speichern in LogThis.txt</string>
+    <string name="plugged_in">Kabel angeschlossen</string>
+    <string name="status_ready">Bereit.</string>
+    <string name="status_wait_next_schedule">Verbunden: Warten nach Ladeplan.</string>
+    <string name="status_wait_car_demand">Verbunden: Warten auf Ladeanfrage.</string>
+    <string name="status_paused">Vom Benutzer angehalten.</string>
+    <string name="status_power_boost_waiting">Verbunden, PowerBoost meldet:\nKEINE STROMVERFÜGUNG\nzum Aufladen.</string>
+    <string name="status_charging">Ladevorgang lauft…</string>
+    <string name="status_locked">Gesperrt.</string>
+    <string name="status_wait_unlock">Warten auf Entsperrung.</string>
+    <string name="status_unknown">Unbekannter Status: </string>
+    <string name="status_attrs_missing">Datenattribut Status und Statusbeschreibung fehlen.</string>
+    <string name="status_not_connected">NICHT mit my.wallbox.com verbunden\nWallbox aus- und wieder einschalten (Sicherungszählerkasten)\nAnmeldung korrekt ?</string>
+    <string name="txt_are_you_sure_exit">Aufhören, bist du sicher?</string>
+    <string name="txt_really_exit">WandDeuze verlassen !</string>
+    <string name="nbrReceivedChargerStatus">Die Anzahl der erhaltenen Status anzeigen</string>
+    <string name="login_account">Anmeldekonto</string>
+    <string name="settings">Präferenzen</string>
+    <string name="charger">Ladegerät</string>
+
+    <string name="language">Sprache: Deutsch</string>
+    <string name="disclaimer">Haftungsausschluss</string>
+    <string name="privacy_policy">Datenschutz-Bestimmungen</string>
+    <string name="error_user_pwd">Benutzername, Passwort, Seriennummer oder nicht Online ?\n</string>
+</resources>

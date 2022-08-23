@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="error_user_pwd">"Username, password, charger Id or not Online ? "</string>
+</resources>

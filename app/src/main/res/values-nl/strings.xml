@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WandDeuze</string>
+    <string name="username">Gebruikersnaam</string>
+    <string name="password">Wachtwoord</string>
+    <string name="chargerid">Serienummer</string>
+    <string name="preferences">Voorkeuren</string>
+    <string name="connecttimeout">Time out Wifi (seconden)</string>
+    <string name="connected">Verbonden</string>
+    <string name="no_chargerdata">Ontvangen data heeft geen lader gegevens.</string>
+    <string name="no_configdata">Ontvangen data heeft geen configuratie gegevens.</string>
+    <string name="data_not_received">Geen gegevens ontvangen van de wallbox.</string>
+    <string name="some_message">Wachten op gegevens…</string>
+    <string name="locked">Vergendeld</string>
+    <string name="unlocked">OntGrendeld</string>
+    <string name="pauze">Pauzeer</string>
+    <string name="resume">Hervatten</string>
+    <string name="change_charge_current">Verander de laadstroom</string>
+    <string name="accept">Accepteren</string>
+    <string name="decline">Afwijzen</string>
+    <string name="log_to_logcat">AndroidStudio Logcat</string>
+    <string name="log_to_file">Data opslaan in LogThis.txt</string>
+    <string name="plugged_in">Kabel aangesloten</string>
+    <string name="status_ready">Gereed.</string>
+    <string name="status_wait_next_schedule">Verbonden: wacht volgens laadschema.</string>
+    <string name="status_wait_car_demand">Verbonden: wacht op laadverzoek auto.</string>
+    <string name="status_paused">Gepauseerd door de gebruiker.</string>
+    <string name="status_power_boost_waiting">Verbonden, PowerBoost meldt:\nONVOLDOENDE STROOM BESCHIKBAAR\nvoor het opladen.</string>
+    <string name="status_charging">Bezig met opladen…</string>
+    <string name="status_locked">Vergrendeld.</string>
+    <string name="status_wait_unlock">Wacht op OntGrendelen.</string>
+    <string name="status_unknown">Onbekende status: </string>
+    <string name="status_attrs_missing">Data attribute status en status description ontbreken.</string>
+    <string name="status_not_connected">NIET verbonden met my.wallbox.com\nZet wallbox uit dan aan (zekering meterkast)\nLogin correct ?</string>
+    <string name="txt_are_you_sure_exit">Stoppen, weet u het zeker ?</string>
+    <string name="txt_really_exit">Exit WandDeuze !</string>
+    <string name="nbrReceivedChargerStatus">Toon aantal ontvangen statussen</string>
+    <string name="login_account">Login account</string>
+    <string name="settings">Instellingen</string>
+    <string name="charger">Oplader</string>
+
+    <string name="language">Taal: Nederlands</string>
+    <string name="disclaimer">Vrijwaring</string>
+    <string name="privacy_policy">Privacybeleid</string>
+    <string name="error_user_pwd">Gebruikersnaam, wachtwoord, serienummer of niet Online ?\n</string>
+</resources>

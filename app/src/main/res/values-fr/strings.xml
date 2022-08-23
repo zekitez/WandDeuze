@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WandDeuze</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="chargerid">Numéro de série</string>
+    <string name="preferences">Préférences</string>
+    <string name="connecttimeout">Délai d\'attente LAN sans fil (secondes)</string>
+    <string name="connected">Connecté</string>
+    <string name="no_chargerdata">Les données reçues ne contiennent pas de données de charge.</string>
+    <string name="no_configdata">Les données reçues ne contiennent pas de données de configuration.</string>
+    <string name="data_not_received">Aucune donnée reçue de la Wallbox.</string>
+    <string name="some_message">En attente de données…</string>
+    <string name="locked">Verrouillé</string>
+    <string name="unlocked">Déverrouillé</string>
+    <string name="pauze">Pause</string>
+    <string name="resume">Reprendre</string>
+    <string name="change_charge_current">Changer le courant de charge</string>
+    <string name="accept">Accepter</string>
+    <string name="decline">Refuser</string>
+    <string name="log_to_logcat">AndroidStudio Logcat</string>
+    <string name="log_to_file">Enregistrer les données dans LogThis.txt</string>
+    <string name="plugged_in">Câble connecté</string>
+    <string name="status_ready">Prêt.</string>
+    <string name="status_wait_next_schedule">Connecté : Attendre selon le plan de chargement.</string>
+    <string name="status_wait_car_demand">Connecté : Attendre la demande de chargement.</string>
+    <string name="status_paused">Arrêté par l\'utilisateur.</string>
+    <string name="status_power_boost_waiting">Connecté, PowerBoost signale :\nPAS DE DISPONIBILITÉ D\'ÉLECTRICITÉ\Npour recharger.</string>
+    <string name="status_charging">Charge en cours…</string>
+    <string name="status_locked">Verrouillé.</string>
+    <string name="status_wait_unlock">En attente de déverrouillage.</string>
+    <string name="status_unknown">Statut inconnu : </string>
+    <string name="status_attrs_missing">L\'attribut de données Statut et la description du statut sont manquants.</string>
+    <string name="status_not_connected">Non connecté à my.wallbox.com\nÉteindre et rallumer la wallbox (boîte de compteur à fusibles)\nConnexion correcte ?</string>
+    <string name="txt_are_you_sure_exit">Arrêter, tu es sûr ?</string>
+    <string name="txt_really_exit">WandDeuze quitter  !</string>
+    <string name="nbrReceivedChargerStatus">Afficher le nombre de statuts reçus</string>
+    <string name="login_account">Compte de connexion</string>
+    <string name="settings">Préférences</string>
+    <string name="charger">Chargeur</string>
+
+    <string name="language">Langue : Français</string>
+    <string name="disclaimer">Clause de non-responsabilité</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
+    <string name="error_user_pwd">Nom d\'utilisateur, mot de passe, numéro de série ou pas en ligne ?\n</string>
+</resources>

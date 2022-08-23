@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WandDeuze</string>
+    <string name="username">Användarnamn</string>
+    <string name="password">Lösenord</string>
+    <string name="chargerid">Serienummer</string>
+    <string name="preferences">Inställningar</string>
+    <string name="connecttimeout">WLAN-timeout (sekunder)</string>
+    <string name="connected">Ansluten</string>
+    <string name="no_chargerdata">De mottagna uppgifterna innehåller inga laddningsdata.</string>
+    <string name="no_configdata">De mottagna uppgifterna innehåller inga konfigurationsdata.</string>
+    <string name="data_not_received">Ingen data mottagen från wallboxen.</string>
+    <string name="some_message">Väntar på data…</string>
+    <string name="locked">Låst</string>
+    <string name="unlocked">Upplåst</string>
+    <string name="pauze">Paus</string>
+    <string name="resume">Fortsätt</string>
+    <string name="change_charge_current">Ändra laddningsström</string>
+    <string name="accept">Acceptera</string>
+    <string name="decline">Avvisa</string>
+    <string name="log_to_logcat">AndroidStudio Logcat</string>
+    <string name="log_to_file">Spara data till LogThis.txt</string>
+    <string name="plugged_in">Kabel ansluten</string>
+    <string name="status_ready">Klar.</string>
+    <string name="status_wait_next_schedule">Ansluten: Väntar efter laddningsschema.</string>
+    <string name="status_wait_car_demand">Ansluten: Väntar på efterfrågan på bil.</string>
+    <string name="status_paused">Pausad av användare.</string>
+    <string name="status_power_boost_waiting">Ansluten, PowerBoost rapporterar:\nINGEN STRÖM TILLGÄNGLIG\natt ladda.</string>
+    <string name="status_charging">Laddning pågår…</string>
+    <string name="status_locked">Låst.</string>
+    <string name="status_wait_unlock">Väntar på upplåsning.</string>
+    <string name="status_unknown">Okänd status: </string>
+    <string name="status_attrs_missing">Dataattributstatus och statusbeskrivning saknas.</string>
+    <string name="status_not_connected">INTE ansluten till my.wallbox.com\nStäng av wallboxen och sätt på den igen (säkringsmätardosa)\nRätt inloggning?</string>
+    <string name="txt_are_you_sure_exit">Avsluta, är du säker?</string>
+    <string name="txt_really_exit">Avsluta WandDeuze !</string>
+    <string name="nbrReceivedChargerStatus">Visa antalet mottagna statusar</string>
+    <string name="login_account">Inloggningskonto</string>
+    <string name="settings">Inställningar</string>
+    <string name="charger">Laddare</string>
+
+    <string name="language">Språk: Svenska</string>
+    <string name="disclaimer">Varning</string>
+    <string name="privacy_policy">Integritetspolicy</string>
+    <string name="error_user_pwd">"Användarnamn, lösenord, serienummer eller inte Online ? "</string>
+</resources>

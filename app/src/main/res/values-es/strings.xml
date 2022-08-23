@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WandDeuze</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="chargerid">Número de serie</string>
+    <string name="preferences">Preferencias</string>
+    <string name="connecttimeout">Tiempo de espera de conexión Wifi (segundos)</string>
+    <string name="connected">Conectado</string>
+    <string name="no_chargerdata">Los datos recibidos no tienen datos de cargador.</string>
+    <string name="no_configdata">Los datos recibidos no tienen configData.</string>
+    <string name="data_not_received">Datos no recibidos de wallbox.</string>
+    <string name="some_message">Esperando respuesta…</string>
+    <string name="locked">Bloqueado</string>
+    <string name="unlocked">Desbloqueado</string>
+    <string name="pauze">Pausa</string>
+    <string name="resume">Reanudar</string>
+    <string name="change_charge_current">Modificar la corriente de carga</string>
+    <string name="accept">Aceptar</string>
+    <string name="decline">Rechazar</string>
+    <string name="log_to_logcat">AndroidStudio Logcat</string>
+    <string name="log_to_file">Al archivo LogThis.txt</string>
+    <string name="plugged_in">Cable enchufado.</string>
+    <string name="status_ready">Listo.</string>
+    <string name="status_wait_next_schedule">Conectado: esperando que comience el próximo horario.</string>
+    <string name="status_wait_car_demand">Conectado: esperando demanda de coche.</string>
+    <string name="status_paused">Pausado por el usuario.</string>
+    <string name="status_power_boost_waiting">Conectado, PowerBoost informa:\nNO HAY SUFICIENTE ENERGÍA DISPONIBLE\npara comenzar a cargar.</string>
+    <string name="status_charging">Cargando…</string>
+    <string name="status_locked">Bloqueado.</string>
+    <string name="status_wait_unlock">>Esperando para desbloquear.</string>
+    <string name="status_unknown">Estado desconocido: </string>
+    <string name="status_attrs_missing">Falta el estado del atributo y la descripción del estado.</string>
+    <string name="status_not_connected">NO conectado a my.wallbox.com\nApague y encienda wallbox (fusible caja de pared)\n¿Iniciar sesión?</string>
+    <string name="txt_are_you_sure_exit">¿Está seguro de que desea salir?</string>
+    <string name="txt_really_exit">Salir de WandDeuze !</string>
+    <string name="nbrReceivedChargerStatus">Mostrar el número de estados del cargador recibido</string>
+    <string name="login_account">Iniciar sesión</string>
+    <string name="settings">Ajustes</string>
+    <string name="charger">Cargador</string>
+
+    <string name="language">Idioma: Español</string>
+    <string name="disclaimer">Descargo de responsabilidad</string>
+    <string name="privacy_policy">Política de privacidad</string>
+    <string name="error_user_pwd">Nombre de usuario, contraseña, número de serie o no en línea?\n</string>
+</resources>
