@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.sdsmdg.harjot.croller.Croller;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -28,6 +31,7 @@ import androidx.preference.PreferenceManager;
 
 import android.os.Process;
 
+import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -66,12 +70,12 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         getPrefs(false);
         LogThis.d(TAG, "onCreate");
 
+        Context context = getApplicationContext();
         globalFunctions = (GlobalFunctions) getApplicationContext();
-        wallbox = new WallboxPulsarPlus(this);
+        wallbox = new WallboxPulsarPlus(context, this);
 
         setContentView(R.layout.main_activity);
         try{
-            Context context = getApplicationContext();
             String versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
             setTitle(getString(R.string.app_name) + "  " + versionName );
         } catch (Exception e) {
@@ -111,6 +115,21 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         wallbox.destroyTimer();
         destroySlowDownTimer();
         getPrefs(true);
+
+        // The language may have been changed so update all text fields.
+        checkBoxConnected.setText(R.string.connected);
+        checkBoxPluggedIn.setText(R.string.plugged_in);
+
+        radioButtonLock.setText(R.string.locked);
+        radioButtonUnLock.setText(R.string.unlocked);
+
+        radioButtonPauze.setText(R.string.pauze);
+        radioButtonResume.setText(R.string.resume);
+
+        enableCurrentChangeSwitch.setText(R.string.change_charge_current);
+
+        invalidateOptionsMenu();  // Updates the language of the menu.
+
     }
 
     @Override
@@ -147,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LogThis.d(TAG, "onConfigurationChanged");
     }
@@ -180,7 +199,19 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
     //-----------
 
-    public void getPrefs(boolean askAcceptance) {
+    public void changeLanguage(String language){
+        Resources resources = getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = new Locale(language);
+        resources.updateConfiguration(configuration, metrics);
+        onConfigurationChanged(configuration);
+        if ( wallbox != null){
+            wallbox.changeLanguage(this);
+        }
+    }
+
+    private void getPrefs(boolean askAcceptance) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String username = prefs.getString(getString(R.string.key_username), "unknown");
         String password = prefs.getString(getString(R.string.key_password), "unknown");
@@ -190,6 +221,9 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         boolean logcat = prefs.getBoolean(getString(R.string.key_logcat), false);
         boolean logToFile = prefs.getBoolean(getString(R.string.key_logToFile), false);
         LogThis.createLog(this, logcat, logToFile);
+
+        changeLanguage(prefs.getString(getString(R.string.key_displayLanguage),"en"));
+
 
         if (askAcceptance) {
             boolean value = prefs.getBoolean(getString(R.string.key_privacyPolycyAccepted), false);
@@ -310,7 +344,8 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
     private synchronized void handleStatus(int status, String description) {
         if (displayNbrChargerStatusses) {
-            textViewMessage.setText("" + count + ".   " + description);
+            String msg = "" + count + ".   " + description;
+            textViewMessage.setText(msg);
         } else {
             textViewMessage.setText(description);
         }

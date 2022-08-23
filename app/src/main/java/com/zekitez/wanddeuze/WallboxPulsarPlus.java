@@ -1,5 +1,6 @@
 package com.zekitez.wanddeuze;
 
+import android.content.Context;
 import android.util.Base64;
 
 import org.json.JSONException;
@@ -49,9 +50,8 @@ public class WallboxPulsarPlus {
     final String METHOD_PUT = "PUT";
     final String METHOD_POST = "POST";
 
-    final String ERROR_USER_PWD = "Username, password, charger Id or not Online ??\n";
-
     private final WallboxResultListener callback;
+    private Context context;
 
     ScheduledExecutorService timer = null;
 
@@ -60,7 +60,8 @@ public class WallboxPulsarPlus {
 
     //-----------------------------------
 
-    public WallboxPulsarPlus(WallboxResultListener callback) {
+    public WallboxPulsarPlus(Context context, WallboxResultListener callback) {
+        this.context = context;
         this.callback = callback;
     }
 
@@ -96,7 +97,8 @@ public class WallboxPulsarPlus {
                     token = response.getString("jwt");
                     callback.wallboxConnectedListener(true, text);
                 } else {
-                    callback.wallboxErrorListener(ERROR_USER_PWD + text);
+                    text =  context.getString(R.string.error_user_pwd) + text;
+                    callback.wallboxErrorListener(text);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -161,6 +163,11 @@ public class WallboxPulsarPlus {
         }
     }
 
+    public void changeLanguage(Context context){
+        // This was needed to get the language right when login fails.
+        this.context = context;
+    }
+
     public void getWallboxState(String chargerId, int startDelay, int period) {
         LogThis.d(TAG, "getWallboxState startDelay:" + startDelay + "  period:" + period);
         if (token == null) return;
@@ -192,7 +199,7 @@ public class WallboxPulsarPlus {
                     // LogThis.d(TAG, PERIODICSTATEREQUEST + RESPONSE + response);
                     callback.wallboxStateListener(true, response);
                 } else {
-                    callback.wallboxErrorListener(PERIODICSTATEREQUEST + " " + text + "\n" + ERROR_USER_PWD);
+                    callback.wallboxErrorListener(PERIODICSTATEREQUEST + " " + text + "\n" + context.getString(R.string.error_user_pwd) );
                 }
             } catch (Exception e) {
                 e.printStackTrace();

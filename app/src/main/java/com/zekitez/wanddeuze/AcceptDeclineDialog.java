@@ -3,7 +3,6 @@ package com.zekitez.wanddeuze;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.SharedPreferences;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -29,22 +28,16 @@ public class AcceptDeclineDialog {
         textviewMessage.setText(HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_COMPACT));
 
         Button button = dialog.findViewById(R.id.buttonAccept);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        button.setOnClickListener(view -> {
                 setPref(true);
                 dialog.dismiss();
-            }
         });
 
         button = dialog.findViewById(R.id.buttonDecline);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        button.setOnClickListener(view -> {
                 setPref(false);
                 dialog.dismiss();
                 activity.finish();
-            }
         });
 
         dialog.show();
