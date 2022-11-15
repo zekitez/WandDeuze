@@ -66,7 +66,7 @@ Findings are not complete, could be wrong and may change at any time.
 More data is needed to confirm/complete the findings but that take time (wrt month transitions).
 To investigate: lastSync and last_sync
 
-<img src="screenshots/two.png" height="400" alt="Screenshot" />
+<img src="screenshots/four.png" height="400" alt="Screenshot" />
 
 ## Charger Lock/Unlock and monthly energy status.
    
