@@ -25,10 +25,18 @@
             app:useSimpleSummaryProvider="true"
             app:singleLineTitle="false" />
         <CheckBoxPreference
+            app:defaultValue="true"
             app:key="@string/key_displayNbrChargerStats"
             app:title="@string/nbrReceivedChargerStatus"
             app:useSimpleSummaryProvider="true"
             app:singleLineTitle="false" />
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="@string/key_displayEnergyData"
+            app:title="@string/dispayEnergyData"
+            app:useSimpleSummaryProvider="true"
+            app:singleLineTitle="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/settings"
@@ -40,10 +48,12 @@
             app:key="@string/key_displayLanguage"
             app:title="@string/language" />
         <CheckBoxPreference
+            app:defaultValue="false"
             app:key="@string/key_logcat"
             app:title="@string/log_to_logcat"
             app:useSimpleSummaryProvider="true" />
         <CheckBoxPreference
+            app:defaultValue="true"
             app:key="@string/key_logToFile"
             app:title="@string/log_to_file"
             app:useSimpleSummaryProvider="true"
