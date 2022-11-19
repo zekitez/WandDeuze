@@ -43,4 +43,9 @@
     <string name="disclaimer">Haftungsausschluss</string>
     <string name="privacy_policy">Datenschutz-Bestimmungen</string>
     <string name="error_user_pwd">Benutzername, Passwort, Seriennummer oder nicht Online ?\n</string>
+    <string name="software_update">"Software-Update verfügbar: "</string>
+    <string name="missing_attribute">"Fehlendes Attribut: "</string>
+    <string name="last_session">"Letzte Ladesession: "</string>
+    <string name="todays_total">"Heutige Summe: "</string>
+    <string name="dispayEnergyData">Verfügbare Energiedaten anzeigen</string>
 </resources>

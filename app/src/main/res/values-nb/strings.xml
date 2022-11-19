@@ -43,4 +43,10 @@
     <string name="disclaimer">Ansvarsfraskrivelse</string>
     <string name="privacy_policy">Personvernerklæring</string>
     <string name="error_user_pwd">Brukernavn, passord, serienummer eller ikke Online ?\n</string>
+    <string name="software_update">"Programvareoppdatering tilgjengelig: "</string>
+    <string name="missing_attribute">"Manglende attributt: "</string>
+    <string name="last_session">"Siste økt: "</string>
+    <string name="todays_total">"Dagens total: "</string>
+    <string name="dispayEnergyData">Vis tilgjengelig energidata</string>
+
 </resources>

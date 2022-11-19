@@ -43,4 +43,9 @@
     <string name="disclaimer">Vrijwaring</string>
     <string name="privacy_policy">Privacybeleid</string>
     <string name="error_user_pwd">Gebruikersnaam, wachtwoord, serienummer of niet Online ?\n</string>
+    <string name="software_update">"Software update beschikbaar: "</string>
+    <string name="missing_attribute">"Ontbrekend attribuut: "</string>
+    <string name="last_session">"Laatste sessie: "</string>
+    <string name="todays_total">"Vandaags totaal: "</string>
+    <string name="dispayEnergyData">Beschikbare energie data weergeven</string>
 </resources>

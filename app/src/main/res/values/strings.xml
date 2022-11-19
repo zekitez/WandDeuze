@@ -58,5 +58,10 @@
     <string name="disclaimer">Disclaimer</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="error_user_pwd">Username, password, charger Id or not Online ?\n</string>
+    <string name="software_update">"Software update available: "</string>
+    <string name="missing_attribute">"Missing attribute: "</string>
+    <string name="last_session">"Last session: "</string>
+    <string name="todays_total">"Today\'s total: "</string>
+    <string name="dispayEnergyData">Display avalable energy data</string>
 
 </resources>

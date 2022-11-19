@@ -43,4 +43,9 @@
     <string name="disclaimer">Descargo de responsabilidad</string>
     <string name="privacy_policy">Política de privacidad</string>
     <string name="error_user_pwd">Nombre de usuario, contraseña, número de serie o no en línea?\n</string>
+    <string name="software_update">"Actualización de software disponible: "</string>
+    <string name="missing_attribute">"Falta un atributo: "</string>
+    <string name="last_session">"Última sesión: "</string>
+    <string name="todays_total">"Total de hoy: "</string>
+    <string name="dispayEnergyData">Mostrar datos de energía disponibles</string>
 </resources>

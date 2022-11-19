@@ -42,5 +42,10 @@
     <string name="language">Språk: Svenska</string>
     <string name="disclaimer">Varning</string>
     <string name="privacy_policy">Integritetspolicy</string>
-    <string name="error_user_pwd">"Användarnamn, lösenord, serienummer eller inte Online ? "</string>
+    <string name="error_user_pwd">Användarnamn, lösenord, serienummer eller inte Online ? </string>
+    <string name="software_update">"Programuppdatering finns tillgänglig: :</string>
+    <string name="missing_attribute">"Saknat attribut: "</string>
+    <string name="last_session">"Senaste session: "</string>
+    <string name="todays_total">"Dagens totalsumma: "</string>
+    <string name="dispayEnergyData">Visa tillgängliga energidata</string>
 </resources>
