@@ -155,6 +155,7 @@ public class Croller extends View {
         if (getLabelFont() != null && !getLabelFont().isEmpty()) {
             AssetManager assetMgr = getContext().getAssets();
             plainLabel = Typeface.createFromAsset(assetMgr, getLabelFont());
+            assetMgr.close();  //
         }
 
         switch (getLabelStyle()) {
