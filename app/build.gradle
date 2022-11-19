@@ -9,8 +9,8 @@ android {
         applicationId "com.zekitez.wanddeuze"
         minSdk 21
         targetSdk 31
-        versionCode 17
-        versionName "1.1.0"
+        versionCode 18
+        versionName "1.2.0"
     }
 
     buildTypes {
@@ -24,6 +24,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.zekitez.wanddeuze'
 }
 
 dependencies {
@@ -32,4 +33,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.preference:preference:1.2.0'
     implementation project(':Croller')
+
+    // https://mvnrepository.com/artifact/javax.json/javax.json-api/1.1.4
+    implementation group: 'javax.json', name: 'javax.json-api', version: '1.1.4'
+    // https://docs.spring.io/spring-boot/docs/current/reference/html/dependency-versions.html
+    implementation 'org.apache.johnzon:johnzon-core:1.2.19'
 }
