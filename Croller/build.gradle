@@ -16,6 +16,7 @@ android {
     lint {
         abortOnError false
     }
+    namespace 'com.sdsmdg.harjot.croller'
 }
 
 dependencies {
