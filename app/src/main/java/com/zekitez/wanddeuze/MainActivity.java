@@ -31,10 +31,15 @@ import androidx.preference.PreferenceManager;
 
 import android.os.Process;
 
+import java.io.StringReader;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import javax.json.Json;
+import javax.json.JsonMergePatch;
+import javax.json.JsonValue;
 
 public class MainActivity extends AppCompatActivity implements WallboxResultListener {
 
@@ -44,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     private Boolean displayNbrChargerStatusses = false;
 
     private TextView textViewMessage;
+    private TextView textViewEnergyLock;
+    private TextView textViewEnergyState;
     private CheckBox checkBoxConnected;
     private CheckBox checkBoxPluggedIn;
 
@@ -59,9 +66,16 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     private Croller croller;
 
     private WallboxPulsarPlus wallbox;
+    private WallboxSessionData wallboxSessionData;
     private ScheduledExecutorService timer = null;
 
     public GlobalFunctions globalFunctions;
+
+    // Log difference in JSON objects: https://cassiomolin.com/2019/08/08/comparing-json-documents-in-java-with-jsonp/
+    private JsonValue startState, startLockChange;
+
+    private String softwareInfo;
+    private String prevTitle = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         Context context = getApplicationContext();
         globalFunctions = (GlobalFunctions) getApplicationContext();
         wallbox = new WallboxPulsarPlus(context, this);
+        wallboxSessionData = new WallboxSessionData(context, wallbox);
 
         setContentView(R.layout.main_activity);
         try{
@@ -83,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         }
 
         textViewMessage = findViewById(R.id.textViewMessage);
+        textViewEnergyLock = findViewById(R.id.textViewEnergyLock);
+        textViewEnergyState = findViewById(R.id.textViewEnergyState);
+
         checkBoxConnected = findViewById(R.id.checkboxConnected);
         checkBoxPluggedIn = findViewById(R.id.checkboxPluggedIn);
 
@@ -138,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         LogThis.d(TAG, "onStop");
         wallbox.destroyTimer();
         destroySlowDownTimer();
+        saveWallboxResponses();
     }
 
     @Override
@@ -190,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
             new AcceptDeclineDialog(MainActivity.this, R.layout.disclaimer, globalFunctions.getDisclaimerTxt());
 
         } else if (itemId == R.id.action_privacy_policy) {
-            new AcceptDeclineDialog(MainActivity.this, R.layout.privacy_policy, globalFunctions.getPrivicyPolicyTxt());
+            new AcceptDeclineDialog(MainActivity.this, R.layout.privacy_policy, globalFunctions.getPrivacyPolicyTxt());
 
         }
         return (super.onOptionsItemSelected(item));
@@ -209,6 +228,9 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         if ( wallbox != null){
             wallbox.changeLanguage(this);
         }
+        if ( wallboxSessionData != null){
+            wallboxSessionData.changeLanguage(this);
+        }
     }
 
     private void getPrefs(boolean askAcceptance) {
@@ -218,6 +240,17 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
         int connectionTimeOutSec = Integer.parseInt(prefs.getString(getString(R.string.key_connectionTimeOut), "4"));
         chargerId = prefs.getString(getString(R.string.key_chargerId), "unknown");
         displayNbrChargerStatusses = prefs.getBoolean(getString(R.string.key_displayNbrChargerStats), false);
+
+        if (textViewEnergyLock != null) {
+            if (prefs.getBoolean(getString(R.string.key_displayEnergyData), true)) {
+                textViewEnergyLock.setVisibility(View.VISIBLE);
+                textViewEnergyState.setVisibility(View.VISIBLE);
+            } else {
+                textViewEnergyLock.setVisibility(View.GONE);
+                textViewEnergyState.setVisibility(View.GONE);
+            }
+        }
+
         boolean logcat = prefs.getBoolean(getString(R.string.key_logcat), false);
         boolean logToFile = prefs.getBoolean(getString(R.string.key_logToFile), false);
         LogThis.createLog(this, logcat, logToFile);
@@ -226,9 +259,9 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
 
         if (askAcceptance) {
-            boolean value = prefs.getBoolean(getString(R.string.key_privacyPolycyAccepted), false);
+            boolean value = prefs.getBoolean(getString(R.string.key_privacyPolicyAccepted), false);
             if (value == false) {
-                new AcceptDeclineDialog(MainActivity.this, R.layout.privacy_policy, globalFunctions.getPrivicyPolicyTxt());
+                new AcceptDeclineDialog(MainActivity.this, R.layout.privacy_policy, globalFunctions.getPrivacyPolicyTxt());
             }
             value = prefs.getBoolean(getString(R.string.key_disclaimerAccepted), false);
             if (value == false) {
@@ -398,8 +431,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
             radioButtonUnLock.setTextColor(Color.RED);
             radioButtonLock.setTextColor(Color.RED);
         }
-
-        LogThis.e(TAG,"handleLocked status="+status);
+//        LogThis.d(TAG,"handleLocked status="+status);
         switch (status) {
             case WallBoxStatus.STATUS_NOT_CONNECTED:
                 backCircleColor = getResources().getColor(R.color.red);
@@ -427,6 +459,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                 backCircleColor = getResources().getColor(R.color.locked);
                 break;
             default:
+                LogThis.e(TAG,"handleLocked status="+status);
                 backCircleColor = getResources().getColor(R.color.red);
                 break;
         }
@@ -438,6 +471,9 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     private synchronized String getTitle(JSONObject object, String description, String status) throws JSONException {
 
         String title = object.getString(wallbox.NAME) + "\n";
+        if (softwareInfo != null) {
+            title = title + softwareInfo + "\n";
+        }
         if (object.has(description)) {
             title = title + object.getString(description);
         } else {
@@ -481,7 +517,34 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                 title = getString(R.string.status_attrs_missing);
             }
         }
+        if (!prevTitle.equals(title)) {
+            LogThis.d(TAG, "getTitle " + title.replace("\n", "  "));
+            prevTitle = title;
+        }
         return title;
+    }
+
+    private String getSoftwareInfo(JSONObject software) throws JSONException {
+        String txt = null;
+        // LogThis.d(TAG, "getSoftwareInfo " + software);
+        if (software.has(wallbox.UPDATEAVAILABLE)){
+            boolean updatedAvailable = software.getBoolean(wallbox.UPDATEAVAILABLE);
+            if (updatedAvailable){
+                if (software.has(wallbox.LATESTVERSION)){
+                    LogThis.d(TAG, "getSoftwareInfo " + software);
+                    txt = getString(R.string.software_update) + software.getString(wallbox.LATESTVERSION);
+                } else {
+                    txt = getString(R.string.missing_attribute) + wallbox.LATESTVERSION;
+                }
+            } else {
+                if (!software.has(wallbox.CURRENTVERSION)) {
+                    txt = getString(R.string.missing_attribute) + wallbox.CURRENTVERSION;
+                }
+            }
+        } else {
+            txt = getString(R.string.missing_attribute) + wallbox.UPDATEAVAILABLE;
+        }
+        return txt;
     }
 
     private void setRadioButtonsPauseResume(boolean enabled, int color) {
@@ -514,6 +577,7 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
             LogThis.d(TAG, "wallboxConnectedListener " + connected + " " + text);
             checkBoxConnected.setChecked(connected);
             if (connected) {
+                loadWallboxResponses();
                 checkBoxConnected.setTextColor(getResources().getColor(R.color.white));
                 textViewMessage.setText(R.string.some_message);
                 wallbox.getWallboxState(chargerId, 2000, 2000);    // Start
@@ -528,7 +592,21 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     @Override
     public synchronized void wallboxStateListener(boolean resultReceived, JSONObject state) {
         runOnUiThread(() -> {
+
+            // Log the difference wrt the previous state.
+            if (resultReceived) {
+                JsonValue value = Json.createReader(new StringReader(state.toString())).readValue();
+                if (startState == null){
+                    LogThis.d(TAG, "wallboxStateListener " + resultReceived + " " + state);
+                } else {
+                    JsonMergePatch mergeDiff = Json.createMergeDiff(startState, value);
+                    LogThis.d(TAG, "wallboxStateListener diff " + mergeDiff.toJsonValue().toString());
+                }
+                startState = value;
+            } else {
             LogThis.d(TAG, "wallboxStateListener " + resultReceived + " " + state.toString());
+            }
+
             if (resultReceived) {
                 try {
                     if (state.has("max_available_power")) {
@@ -539,6 +617,9 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                     if (state.has(wallbox.CONFIG_DATA)) {
                         JSONObject configData = state.getJSONObject(wallbox.CONFIG_DATA);
                         int status = state.getInt(wallbox.STATUS_ID);
+                        if (configData.has(wallbox.SOFTWARE)) {
+                            softwareInfo = getSoftwareInfo(configData.getJSONObject(wallbox.SOFTWARE));
+                        }
                         handleStatus(status, getTitle(state, wallbox.STATE_STATUS_DESCRIPTION, wallbox.STATUS_ID));
                         handleLocked(configData.getInt(wallbox.LOCKED), status, false);
 
@@ -553,6 +634,8 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 //                        } else {
 //                            radioGroupAction.clearCheck();
                         }
+                        textViewEnergyState.setText( wallboxSessionData.dataFromStateListener(state));
+                        textViewEnergyLock.setText(wallboxSessionData.dataFromLockListener(null));
                         if ( !croller.isEnabled() ) { // No updates while changing the current.
                             if (configData.has("max_charging_current")) {
                                 croller.setProgress(configData.getInt("max_charging_current"));
@@ -579,7 +662,21 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     @Override
     public synchronized void wallboxLockChangeListener(boolean stateReceived, JSONObject response) {
         runOnUiThread(() -> {
+
+            // Log the difference wrt the previous state.
+            if (stateReceived) {
+                JsonValue value = Json.createReader(new StringReader(response.toString())).readValue();
+                if (startLockChange == null){
             LogThis.d(TAG, "wallboxLockChangeListener " + stateReceived + " " + response);
+                } else {
+                    JsonMergePatch mergeDiff = Json.createMergeDiff(startLockChange, value);
+                    LogThis.d(TAG, "wallboxLockChangeListener diff " + mergeDiff.toJsonValue().toString());
+                }
+                startLockChange = value;
+            } else {
+                LogThis.d(TAG, "wallboxLockChangeListener " + stateReceived + " " + response.toString());
+            }
+
             if (stateReceived) {
                 try {
                     if (response.has(wallbox.DATA)) {
@@ -590,6 +687,12 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
 
                             handleStatus(status, getTitle(chargerData, wallbox.STATUS_DESCRIPTION, wallbox.STATUS));
                             handleLocked(chargerData.getInt(wallbox.LOCKED), status, true);
+
+                            if (chargerData.has(wallbox.CD_RESUME)){
+                                textViewEnergyLock.setText( wallboxSessionData.dataFromLockListener(chargerData.getJSONObject(wallbox.CD_RESUME)) );
+                            } else {
+                                LogThis.e(TAG,"LockChangeListener: cumulative monthly charger data (resume) missing !");
+                            }
 
                         } else {
                             textViewMessage.setText(R.string.no_chargerdata);
@@ -660,6 +763,13 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
                             } else {
                                 enableCurrentChangeSwitch.setTextColor(Color.RED);
                             }
+
+                            if (chargerData.has(wallbox.CD_RESUME)){
+                                textViewEnergyLock.setText( wallboxSessionData.dataFromLockListener(chargerData.getJSONObject(wallbox.CD_RESUME)) );
+                            } else {
+                                LogThis.e(TAG,"MaxChargingCurrentListener: cumulative monthly charger data (resume) missing !");
+                            }
+
                         } else {
                             textViewMessage.setText(R.string.no_chargerdata);
                         }
@@ -688,4 +798,48 @@ public class MainActivity extends AppCompatActivity implements WallboxResultList
     }
 
     //---------------------------
+    //---------------------------
+
+    // This is used to get differences of the Wallbox data bridging sessions/time.
+
+    final String JSON_AS_PREFS = "JsonAsPrefs";
+
+    private void saveWallboxResponses(){
+        LogThis.d(TAG,"saveWallboxResponses");
+        SharedPreferences values = getSharedPreferences(JSON_AS_PREFS, 0);
+        SharedPreferences.Editor editor = values.edit();
+
+        if (startState != null) {
+            editor.putString(getString(R.string.key_startState), startState.toString());
+        }
+        if (startLockChange != null) {
+            editor.putString(getString(R.string.key_startLockChange), startLockChange.toString());
+        }
+        editor.commit();
+    }
+
+    private void loadWallboxResponses(){
+        LogThis.d(TAG,"loadWallboxResponses");
+        SharedPreferences values = getSharedPreferences(JSON_AS_PREFS, 0);
+
+        String value = values.getString(getString(R.string.key_startState), null);
+        if (value != null) {
+            StringReader stringReader = new StringReader(value);
+            startState = Json.createReader(stringReader).readValue();
+            stringReader.close();
+            LogThis.d(TAG, "loadWallboxResponses last known state " + startState);
+        } else {
+            startState = null;
+        }
+        value = values.getString(getString(R.string.key_startLockChange), null);
+        if (value != null) {
+            StringReader stringReader = new StringReader(value);
+            startLockChange = Json.createReader(stringReader).readValue();
+            stringReader.close();
+            LogThis.d(TAG, "loadWallboxResponses last known lockChange " + startLockChange);
+        } else {
+            startLockChange = null;
+        }
+    }
+
 }

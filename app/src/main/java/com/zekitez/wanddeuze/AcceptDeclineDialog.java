@@ -47,7 +47,7 @@ public class AcceptDeclineDialog {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = prefs.edit();
         if (layoutResID == R.layout.privacy_policy) {
-            editor.putBoolean(activity.getResources().getString(R.string.key_privacyPolycyAccepted), value);
+            editor.putBoolean(activity.getResources().getString(R.string.key_privacyPolicyAccepted), value);
         } else if (layoutResID == R.layout.disclaimer) {
             editor.putBoolean(activity.getResources().getString(R.string.key_disclaimerAccepted), value);
         }

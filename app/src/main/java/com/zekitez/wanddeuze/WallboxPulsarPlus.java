@@ -1,6 +1,7 @@
 package com.zekitez.wanddeuze;
 
 import android.content.Context;
+import android.net.TrafficStats;
 import android.util.Base64;
 
 import org.json.JSONException;
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -31,9 +33,22 @@ public class WallboxPulsarPlus {
     final String STATUS_DESCRIPTION = "statusDescription";
     final String STATE_STATUS_DESCRIPTION = "status_description";
     final String STATUS_ID = "status_id";
+    final String STATUS_ADDED_ENERGY = "added_energy";
     final String STATUS = "status";
     final String LOCKED = "locked";
     final String ACTION = "action";
+
+    final String SOFTWARE = "software";               // in state.config_data
+    final String UPDATEAVAILABLE = "updateAvailable"; // in state.config_data.software
+    final String CURRENTVERSION = "currentVersion";   // in state.config_data.software
+    final String LATESTVERSION = "latestVersion";     // in state.config_data.software
+
+    // final String SOFTWAREVERSION = "softwareVersion";  // lock response
+
+    final String CD_RESUME = "resume";
+    final String CD_RESUME_TOTALSESSIONS = "totalSessions";
+    final String CD_RESUME_CHARGINGTIME = "chargingTime";
+    final String CD_RESUME_TOTALENERGY = "totalEnergy";
 
     final String RESPONSECODE  = ".ResponseCode: ";
     final String RESPONSE = ".Response: ";
@@ -56,7 +71,8 @@ public class WallboxPulsarPlus {
     ScheduledExecutorService timer = null;
 
     private int timeOutMs = 2000;
-    private String encodedUserPassword = null, token = null, chargerId;
+    private String encodedUserPassword = null, token = null, chargerId, user = "",  password = "";
+    private boolean connected = false;
 
     //-----------------------------------
 
@@ -71,7 +87,15 @@ public class WallboxPulsarPlus {
 
     public void connectToWallbox(String user, String password, int timeOutMs) {
         this.timeOutMs = timeOutMs;
+        if (user.equals(this.user) && password.equals(this.password) && connected){
+            callback.wallboxConnectedListener(true, "-");
+            return;
+        } else {
+            this.user = user;
+            this.password = password;
+        }
         new Thread(() -> {
+            TrafficStats.setThreadStatsTag((int) Thread.currentThread().getId()); // <---
             HttpsURLConnection connection = null;
             try {
                 LogThis.d(TAG, CONNECTTOWALLBOX + " timeOutMillieSeconds:" + timeOutMs);
@@ -96,9 +120,11 @@ public class WallboxPulsarPlus {
                     LogThis.d(TAG, CONNECTTOWALLBOX + RESPONSE + response);
                     token = response.getString("jwt");
                     callback.wallboxConnectedListener(true, text);
+                    connected = true;
                 } else {
                     text =  context.getString(R.string.error_user_pwd) + text;
                     callback.wallboxErrorListener(text);
+                    connected = false;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -179,6 +205,7 @@ public class WallboxPulsarPlus {
 
     private class periodicStateRequest implements Runnable {
         public void run() {
+            TrafficStats.setThreadStatsTag((int) Thread.currentThread().getId()); // <---
             HttpsURLConnection connection = null;
             String PERIODICSTATEREQUEST = "periodicStateRequest";
             try {
@@ -199,6 +226,7 @@ public class WallboxPulsarPlus {
                     // LogThis.d(TAG, PERIODICSTATEREQUEST + RESPONSE + response);
                     callback.wallboxStateListener(true, response);
                 } else {
+                    connected = false;
                     callback.wallboxErrorListener(PERIODICSTATEREQUEST + " " + text + "\n" + context.getString(R.string.error_user_pwd) );
                 }
             } catch (Exception e) {
@@ -239,6 +267,7 @@ public class WallboxPulsarPlus {
     public void setWallboxLock(String chargerId, boolean locked) {
         if (token == null) return;
         new Thread(() -> {
+            TrafficStats.setThreadStatsTag((int) Thread.currentThread().getId()); // <---
             HttpsURLConnection connection = null;
             try {
                 int responseCode;
@@ -281,6 +310,7 @@ public class WallboxPulsarPlus {
     public void setWallboxAction(String chargerId, boolean actionPauze) {
         if (token == null) return;
         new Thread(() -> {
+            TrafficStats.setThreadStatsTag((int) Thread.currentThread().getId()); // <---
             HttpsURLConnection connection = null;
             try {
                 int responseCode;
@@ -329,6 +359,7 @@ public class WallboxPulsarPlus {
     public void setWallboxMaxChargingCurrent(String chargerId, int maxChargingCurrent) {
         if (token == null) return;
         new Thread(() -> {
+            TrafficStats.setThreadStatsTag((int) Thread.currentThread().getId()); // <---
             HttpsURLConnection connection = null;
             try {
                 int responseCode;
@@ -387,9 +418,15 @@ public class WallboxPulsarPlus {
     }
 
     private String getStringResponse(HttpsURLConnection connection) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        InputStream inputStream = connection.getInputStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader br = new BufferedReader(inputStreamReader);
         StringBuilder response = new StringBuilder();
-        for (String line; (line = br.readLine()) != null; ) response.append(line + "\n");
+        for (String line; (line = br.readLine()) != null; ) response.append(line).append("\n");
+
+        br.close();                 // Found in strictMode, solution https://stackoverflow.com/questions/15789789/android-strictmode-throwable-explicit-termination-method-end-not-called
+        inputStreamReader.close();  //
+        inputStream.close();        //
         return response.toString();
     }
 
@@ -399,9 +436,14 @@ public class WallboxPulsarPlus {
 
     private void writeData(HttpsURLConnection connection, String query) throws IOException {
         OutputStream outputStream = connection.getOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+        BufferedWriter writer = new BufferedWriter(outputStreamWriter);
+
         writer.write(query);
-        writer.close();
+
+        writer.close();             // Found in strictMode, solution https://stackoverflow.com/questions/15789789/android-strictmode-throwable-explicit-termination-method-end-not-called
+        outputStreamWriter.close(); //
+        outputStream.close();       //
     }
 
 }

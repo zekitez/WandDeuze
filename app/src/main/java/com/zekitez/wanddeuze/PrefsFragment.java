@@ -29,6 +29,7 @@ public class PrefsFragment extends PreferenceFragmentCompat {
     private EditTextPreference editTxtPrefChargerId;
     private EditTextPreference editTxtPrefConnectionTimeOut;
     private CheckBoxPreference editTxtPrefDisplayNbrChargerStats;
+    private CheckBoxPreference editTxtPrefDisplayEnergyData;
 
     private PreferenceCategory prefCatSettings;
     private ListPreference listPrefLanguage;
@@ -67,6 +68,7 @@ public class PrefsFragment extends PreferenceFragmentCompat {
         // Input only numbers. Cannot be set in preferences.xml so do it here !
         editTxtPrefConnectionTimeOut.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER ));
         editTxtPrefDisplayNbrChargerStats = prefManager.findPreference(getString(R.string.key_displayNbrChargerStats));
+        editTxtPrefDisplayEnergyData = prefManager.findPreference(getString(R.string.key_displayEnergyData));
         
         prefCatSettings = prefManager.findPreference(getString(R.string.key_settings));
         checkBoxPreferenceLogToFile = prefManager.findPreference(getString(R.string.key_logToFile));
@@ -91,6 +93,7 @@ public class PrefsFragment extends PreferenceFragmentCompat {
             editTxtPrefChargerId.setTitle(context.getText(R.string.chargerid));
             editTxtPrefConnectionTimeOut.setTitle(context.getText(R.string.connecttimeout));
             editTxtPrefDisplayNbrChargerStats.setTitle(context.getText(R.string.nbrReceivedChargerStatus));
+            editTxtPrefDisplayEnergyData.setTitle(context.getText(R.string.dispayEnergyData));
 
             prefCatSettings.setTitle(context.getText(R.string.settings));
             listPrefLanguage.setTitle(context.getText(R.string.language));

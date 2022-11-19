@@ -13,34 +13,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class LogThis {
-    private static String TAG = "LogThis";
+    private final static String TAG = "LogThis";
     private static File logFile = null;
     private static File prevLogFile = null;
     private static long startTimeLog;
     private static boolean logcat = true;
     private static boolean logToFile = true;
 
-//    public static void reset(Activity activity) {
-//        logFile = new File(activity.getExternalFilesDir(null), "LogThis.txt");
-//        try {
-//            logFile.delete();
-//            logFile.createNewFile();
-//            Calendar rightNow = Calendar.getInstance();
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
-//            appendLog(sdf.format(rightNow.getTime()));
-//            startTimeLog = rightNow.getTimeInMillis();
-//
-//
-//            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//            Uri uri = Uri.fromFile(logFile);
-//            intent.setData(uri);
-//            activity.sendBroadcast(intent);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private static final int MAX_SIZE_FILE = 4096000;
 
-    public static synchronized void i(String TAG, String message) {
+    public static void i(String TAG, String message) {
         if (logcat) {
             Log.i(TAG, message);
         }
@@ -49,7 +31,7 @@ public class LogThis {
         }
     }
 
-    public static synchronized void d(String TAG, String message) {
+    public static void d(String TAG, String message) {
         if (logcat) {
             Log.d(TAG, message);
         }
@@ -58,7 +40,7 @@ public class LogThis {
         }
     }
 
-    public static synchronized void w(String TAG, String message) {
+    public static void w(String TAG, String message) {
         if (logcat) {
             Log.w(TAG, message);
         }
@@ -67,7 +49,7 @@ public class LogThis {
         }
     }
 
-    public static synchronized void e(String TAG, String message) {
+    public static void e(String TAG, String message) {
         if (logcat) {
             Log.e(TAG, message);
         }
@@ -76,7 +58,7 @@ public class LogThis {
         }
     }
 
-    public static void createLog(Activity activity, boolean LogCat, boolean LogToFile) {
+    public static synchronized void createLog(Activity activity, boolean LogCat, boolean LogToFile) {
         if (LogCat) {
             logcat = true;
         } else {
@@ -94,7 +76,7 @@ public class LogThis {
 
                 logFile = new File(activity.getExternalFilesDir(null), "LogThis.txt");
                 prevLogFile = new File(activity.getExternalFilesDir(null), "LogThisPrev.txt");
-                if (logFile.length() > 1024000) {
+                if (logFile.length() > MAX_SIZE_FILE) {
                     moveToPrevFile();
                     //logFile.delete();
                     logFile.createNewFile();
@@ -114,11 +96,11 @@ public class LogThis {
         }
     }
 
-    private static void appendLog(String text, boolean startLog) {
+    private static synchronized void appendLog(String text, boolean startLog) {
         try {
             //BufferedWriter for performance, true to set append to file flag
             if (logFile != null) {
-                if (logFile.length() > 1024000) {
+                if (logFile.length() > MAX_SIZE_FILE) {
                     moveToPrevFile();
                     //logFile.delete();
                     logFile.createNewFile();
@@ -140,6 +122,7 @@ public class LogThis {
                     buf.append(String.format("%10d ms : %s", timeSinceStart, text));
                 }
                 buf.newLine();
+                buf.flush();
                 buf.close();
             }
 

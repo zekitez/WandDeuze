@@ -9,6 +9,12 @@ public class GlobalFunctions extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+		//StrictMode.enableDefaults();
+		// Read  https://stackoverflow.com/questions/47723973/strictmode-java-lang-throwable-untagged-socket-detected
+		//		StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+		//				.detectLeakedClosableObjects()
+		//				.penaltyLog()
+		//				.build());
     }
 
 	@Override
@@ -73,7 +79,7 @@ public class GlobalFunctions extends Application {
 				"<li>By email: zekitez@gmail.com</li>\n" +
 				"</ul>";
 	}
-	public String getPrivicyPolicyTxt(){
+	public String getPrivacyPolicyTxt(){
 		return "<h1>Privacy Policy (in English only)</h1>\n" +
 				"<p>Last updated: February 12, 2022</p>\n" +
 				"<p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>\n" +
@@ -141,5 +147,7 @@ public class GlobalFunctions extends Application {
 				"<ul>\n" +
 				"<li>By email: zekitez@gmail.com</li>\n" +
 				"</ul>";
-	};
+	}
+
+
 }
